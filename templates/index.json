@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "hero": {
+      "type": "aromaras-hero",
+      "settings": {
+        "title": "The Art of Modern Attar",
+        "subtitle": "A curated selection of our most profound compositions, designed to leave an indelible mark on the senses. Crafted with rare botanicals and age-old techniques.",
+        "button_label": "Explore Heritage"
+      }
+    },
+    "icons": {
+      "type": "aromaras-icons",
+      "settings": {
+        "title": "The Signature Icons",
+        "description": "A curated selection of our most profound compositions, designed to leave an indelible mark on the senses."
+      },
+      "blocks": {
+        "saffron": {
+          "type": "product",
+          "settings": {
+            "title": "Saffron Dusk",
+            "subtitle": "Warm, spicy, and deeply mysterious.",
+            "image": "saffron-dusk.png"
+          }
+        },
+        "oudh": {
+          "type": "product",
+          "settings": {
+            "title": "Oudh Imperial",
+            "subtitle": "Rare oudh blended with sacred resins.",
+            "image": "saffron-dusk.png"
+          }
+        }
+      },
+      "block_order": ["saffron", "oudh"]
+    }
+  },
+  "order": [
+    "hero",
+    "icons"
+  ]
+}

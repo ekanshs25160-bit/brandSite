@@ -1,0 +1,104 @@
+<section class="aromaras-hero full-bleed">
+  <div class="hero-content container">
+    <div class="hero-text">
+      <h1 class="display-lg">{{ section.settings.title }}</h1>
+      <p class="headline-sm">{{ section.settings.subtitle }}</p>
+      <a href="{{ section.settings.button_link }}" class="button-primary">{{ section.settings.button_label }}</a>
+    </div>
+  </div>
+  <div class="hero-image-wrapper">
+    <img src="{{ 'aromaras-hero.png' | asset_url }}" alt="{{ section.settings.title }}" class="hero-image">
+  </div>
+</section>
+
+{% stylesheet %}
+  .aromaras-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+    align-items: center;
+    background-color: var(--color-background);
+    overflow: hidden;
+  }
+
+  .hero-content {
+    padding: 10% var(--page-margin);
+    z-index: 2;
+  }
+
+  .hero-text {
+    max-width: 500px;
+  }
+
+  .hero-text h1 {
+    font-size: 5rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: var(--color-primary);
+  }
+
+  .hero-text p {
+    font-size: 1.25rem;
+    margin-bottom: 3rem;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  .hero-image-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .aromaras-hero {
+      grid-template-columns: 1fr;
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Aromaras Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Art of Modern Attar"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "A curated selection of our most profound compositions, designed to leave an indelible mark on the senses."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Explore Heritage"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aromaras Hero"
+    }
+  ]
+}
+{% endschema %}

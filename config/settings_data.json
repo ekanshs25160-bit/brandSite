@@ -1,0 +1,10 @@
+{
+  "current": {
+    "type_primary_font": "noto_serif_n4",
+    "max_page_width": "110rem",
+    "min_page_margin": 40,
+    "background_color": "#faf9f7",
+    "foreground_color": "#1a1c1b",
+    "input_corner_radius": 0
+  }
+}

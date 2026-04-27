@@ -1,0 +1,88 @@
+{% style %}
+  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
+  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+
+  :root {
+    --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+    --font-secondary--family: "Inter", sans-serif;
+    
+    --color-background: {{ settings.background_color }};
+    --color-foreground: {{ settings.foreground_color }};
+    --color-primary: #000000;
+    --color-on-primary: #ffffff;
+    --color-secondary: #775a19;
+    --color-surface-container-low: #f4f3f1;
+    --color-surface-container: #efeeec;
+    --color-surface-container-high: #e9e8e6;
+    --color-outline: #747878;
+    
+    --page-width: {{ settings.max_page_width }};
+    --page-margin: {{ settings.min_page_margin }}px;
+    --border-radius: 0px;
+    
+    --shadow-ambient: 0px 20px 40px rgba(26, 28, 27, 0.06);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-secondary--family);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary--family);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+
+  .full-bleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+
+  .container {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  /* The "No-Line" Rule Implementation */
+  section {
+    border: none !important;
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    background: rgba(250, 249, 247, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  /* Button Styles */
+  .button-primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    padding: 1rem 2rem;
+    border: none;
+    font-family: var(--font-secondary--family);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .button-secondary {
+    background: transparent;
+    border: 1px solid rgba(116, 120, 120, 0.4);
+    color: var(--color-primary);
+    padding: 1rem 2rem;
+    cursor: pointer;
+  }
+{% endstyle %}
