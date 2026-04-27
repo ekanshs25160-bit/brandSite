@@ -1,0 +1,84 @@
+<section class="max-w-screen-2xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 pt-24">
+  <!-- Left: Portrait Image -->
+  <div class="w-full">
+    <div class="aspect-[4/5] bg-surface-container-low overflow-hidden">
+      {% if product.featured_image %}
+        <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title }}" class="w-full h-full object-cover">
+      {% else %}
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA_GW6L_ff4lYsAVuz-tRgiJ_zGcNhcqKtjqZbVMAcg45NsulJmIH9Zcqy_IoTAI50fMT9XQYrKUB10Dgm5cBe9hDZUiOc1fFNTo8aS4Y-uVp15EGF42W-wkZuIOXyC8uFYHmw_NbTlgxQExp7tPhrCYa48ivmpcwaq5nmRja4FTC-b4mKAojPNhZ10EvDhkHIx30BdQdQj_iIGxA7DbkDhkleKBkECaSnbilBa1LUo-L38CSV45qL6su7zRfgSIQI09-4vkwrc_I" alt="Saanjh Fragrance" class="w-full h-full object-cover">
+      {% endif %}
+    </div>
+    <div class="mt-8 grid grid-cols-2 gap-4">
+      {% for image in product.images limit: 2 offset: 1 %}
+        <div class="aspect-[4/5] bg-surface-container-low">
+          <img src="{{ image | image_url: width: 600 }}" alt="{{ product.title }}" class="w-full h-full object-cover">
+        </div>
+      {% else %}
+        {% comment %} Fallback if no secondary images {% endcomment %}
+        <div class="aspect-[4/5] bg-surface-container-low">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPhac3xfxs-Caa_n92GdhTLpflK2Y7Ul4l_8mcmmZmlbPOT6FLSa_Vif5MTC13YUi5q69X-C_a38WhIyg2H7q3JfEtgOGYKMf4VirjOMWi536OaPToPzXEst33k0r6GlQruVE3FAu-o3h-DRFO4c0z8jWRV74VJ8jscZQuKYYf5umUQt1i0Qe8z_D9AkwwUy1dfMgkB-rUC5w0lKeesZuaDEF7Bf9X0ovjkI0ssl4iaRHAQCE_hGjqEjoHXkdKxMp-lPpddTrFR1Y" alt="Detail" class="w-full h-full object-cover">
+        </div>
+        <div class="aspect-[4/5] bg-surface-container-low">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtMWG2qyZXgQzpzTNN9O4PTXGVHIGQYSBC8wy-AXRC_Oz9xPnF7bc_iMvzQgxJUpKkNm4-83EA1d30nJPQDuzoB3pd3yBkzWcj4yh1D2fp3jBFdhmvbYgOQ9S6ZKCpEabpLW_T6u1SQTtkLkv35XagMK6AsoMmxbIe4BPWy7V39uaOgOEh5tqa6Wa_8KWc_dappgqGlmzXMX43ARFn3y6V8_jDOP-Z5UY5jCZ6mkfdCSN0Rv3YH6SmyH3TR_QumXoycy_Y2qGkU3g" alt="Mood" class="w-full h-full object-cover">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Right: Sticky Product Info -->
+  <div class="md:sticky md:top-32 h-fit space-y-12 pb-20">
+    <div class="space-y-4">
+      <p class="font-sans text-[10px] tracking-[0.3em] uppercase text-on-surface-variant">
+        {{ product.type | default: 'Extrait de Parfum' }}
+      </p>
+      <h1 class="text-6xl font-serif font-bold tracking-tight text-primary uppercase">
+        {{ product.title }}
+      </h1>
+      <p class="text-xl font-serif italic text-on-surface-variant">
+        "{{ product.metafields.custom.tagline | default: 'The Golden Hour in a bottle.' }}"
+      </p>
+      <p class="text-2xl font-medium">{{ product.price | money }}</p>
+    </div>
+
+    <div class="space-y-4">
+      <p class="font-sans text-xs uppercase tracking-widest text-on-surface-variant">Select Volume</p>
+      <div class="flex gap-4">
+        {% for variant in product.variants %}
+          <button class="px-8 py-3 {% if forloop.first %}bg-primary text-on-primary shadow-[0_4px_12px_rgba(75,29,29,0.2)]{% else %}bg-surface-container-high hover:bg-neutral-200{% endif %} text-xs tracking-widest uppercase transition-all duration-300">
+            {{ variant.title }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <form method="post" action="/cart/add">
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+        <button type="submit" class="w-full bg-primary text-on-primary py-5 text-xs uppercase tracking-[0.25em] font-medium transition-all active:scale-95 duration-150">
+          Experience the Scent
+        </button>
+      </form>
+      <div class="text-sm text-on-surface-variant leading-relaxed font-light">
+        {{ product.description }}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 pt-8">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">local_shipping</span>
+        <span class="text-[10px] uppercase tracking-widest">Complimentary Shipping</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">auto_awesome</span>
+        <span class="text-[10px] uppercase tracking-widest">Discovery Credit</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Main Info",
+  "settings": []
+}
+{% endschema %}

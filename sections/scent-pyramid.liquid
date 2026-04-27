@@ -1,0 +1,66 @@
+<section class="bg-surface-container-low mt-24 py-32">
+  <div class="max-w-screen-2xl mx-auto px-12">
+    <div class="text-center mb-20">
+      <h2 class="text-4xl font-serif mb-4">The Olfactory Architecture</h2>
+      <p class="text-on-surface-variant max-w-xl mx-auto font-light">A complex evolution that unfolds on the skin over twelve hours.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <!-- Top -->
+      <div class="flex flex-col items-center text-center space-y-6">
+        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-primary">air</span>
+        </div>
+        <div>
+          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Top Notes</h3>
+          <p class="font-serif italic text-lg">{{ section.settings.top_notes | default: 'Saffron, Bergamot, Pink Pepper' }}</p>
+          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">Immediate Impression (0-30 mins)</p>
+        </div>
+      </div>
+      <!-- Heart -->
+      <div class="flex flex-col items-center text-center space-y-6">
+        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-primary">favorite</span>
+        </div>
+        <div>
+          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Heart Notes</h3>
+          <p class="font-serif italic text-lg">{{ section.settings.heart_notes | default: 'Oudh, Crimson Rose, Jasmine' }}</p>
+          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Scent Identity (1-4 hours)</p>
+        </div>
+      </div>
+      <!-- Base -->
+      <div class="flex flex-col items-center text-center space-y-6">
+        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-primary">grass</span>
+        </div>
+        <div>
+          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Base Notes</h3>
+          <p class="font-serif italic text-lg">{{ section.settings.base_notes | default: 'Sandalwood, Vanilla, Amber' }}</p>
+          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Dry Down (4-12 hours)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Scent Pyramid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "top_notes",
+      "label": "Top Notes"
+    },
+    {
+      "type": "text",
+      "id": "heart_notes",
+      "label": "Heart Notes"
+    },
+    {
+      "type": "text",
+      "id": "base_notes",
+      "label": "Base Notes"
+    }
+  ]
+}
+{% endschema %}

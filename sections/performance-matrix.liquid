@@ -1,0 +1,54 @@
+<section class="max-w-screen-2xl mx-auto px-12 py-32 grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+  <div>
+    <h2 class="text-4xl font-serif mb-8">Scent Performance</h2>
+    <div class="space-y-10">
+      <div class="space-y-3">
+        <div class="flex justify-between text-xs uppercase tracking-widest">
+          <span>Longevity</span>
+          <span>12+ Hours</span>
+        </div>
+        <div class="h-[1px] w-full bg-outline-variant/30 relative">
+          <div class="absolute h-full bg-primary w-[95%]"></div>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="flex justify-between text-xs uppercase tracking-widest">
+          <span>Sillage</span>
+          <span>Strong</span>
+        </div>
+        <div class="h-[1px] w-full bg-outline-variant/30 relative">
+          <div class="absolute h-full bg-primary w-[80%]"></div>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="flex justify-between text-xs uppercase tracking-widest">
+          <span>Authenticity</span>
+          <span>Artisanal</span>
+        </div>
+        <div class="h-[1px] w-full bg-outline-variant/30 relative">
+          <div class="absolute h-full bg-primary w-[100%]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="aspect-[4/5] bg-surface-container overflow-hidden">
+    {% if section.settings.image %}
+      <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="Performance" class="w-full h-full object-cover">
+    {% else %}
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCodBiVjx-kU6WkVzvunxudsVCWdf7s6fkTC_Wt7NqsKXgD1NeBX6NE8nDAKhELy0U6gjBFovOq7pBZX4JDAbfj_lNQrPpS_8_KTlejAM0H6ajWCmTnQuujytLT3Eafu7v2CUg6TAefVp_drR_lEwNcwYlqkn8QiWQcb5T-Y-lSYnRpTRKQ6jBoxXCPsuRG9pxZUbVVlM5YiDDkPo-sRybXiCyGlQsZskZF9g26d0_fyeHdM_4vcxWLSGJkGQXMWJbjiA81HzGwQW0" alt="Saffron Macro" class="w-full h-full object-cover">
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Performance Matrix",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Macro Image"
+    }
+  ]
+}
+{% endschema %}

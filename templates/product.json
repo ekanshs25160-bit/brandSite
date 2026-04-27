@@ -1,20 +1,36 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
-      "type": "product",
+      "type": "product-main",
+      "settings": {}
+    },
+    "scent_pyramid": {
+      "type": "scent-pyramid",
+      "settings": {}
+    },
+    "performance_matrix": {
+      "type": "performance-matrix",
+      "settings": {}
+    },
+    "layering": {
+      "type": "layering-suggestion",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {}
+    },
+    "ingredients": {
+      "type": "ingredient-gallery",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "scent_pyramid",
+    "performance_matrix",
+    "layering",
+    "reviews",
+    "ingredients"
   ]
 }
