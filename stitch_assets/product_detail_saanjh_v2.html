@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#c8c6c5",
+                    "surface-dim": "#dadad8",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#5d4201",
+                    "surface-bright": "#faf9f7",
+                    "on-primary-fixed-variant": "#474646",
+                    "surface": "#faf9f7",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#e5e2e1",
+                    "on-secondary-fixed": "#261900",
+                    "error": "#ba1a1a",
+                    "on-background": "#1a1c1b",
+                    "on-surface-variant": "#444748",
+                    "surface-container-highest": "#e3e2e0",
+                    "on-tertiary-fixed": "#241a0e",
+                    "surface-variant": "#e3e2e0",
+                    "on-tertiary-container": "#928170",
+                    "on-surface": "#1a1c1b",
+                    "primary-container": "#4B1D1D",
+                    "background": "#faf9f7",
+                    "secondary": "#4B1D1D",
+                    "inverse-surface": "#2f3130",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#efeeec",
+                    "on-tertiary-fixed-variant": "#524436",
+                    "on-primary-fixed": "#4B1D1D",
+                    "on-secondary-container": "#ffffff",
+                    "tertiary-fixed-dim": "#d7c3b0",
+                    "primary": "#4B1D1D",
+                    "outline": "#747878",
+                    "secondary-fixed-dim": "#e9c176",
+                    "tertiary-fixed": "#f4dfcb",
+                    "inverse-on-surface": "#f1f1ef",
+                    "tertiary": "#4B1D1D",
+                    "secondary-container": "#4B1D1D",
+                    "surface-tint": "#5f5e5e",
+                    "surface-container-high": "#e9e8e6",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f4f3f1",
+                    "tertiary-container": "#241a0e",
+                    "outline-variant": "#c4c7c7",
+                    "inverse-primary": "#c8c6c5",
+                    "secondary-fixed": "#ffdea5",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#858383"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Noto Serif', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-12 py-6 w-full">
+<div class="text-2xl font-serif tracking-[0.3em] text-neutral-900 dark:text-neutral-50 uppercase">AROMARAS</div>
+<div class="hidden md:flex gap-12">
+<a class="text-neutral-900 dark:white font-semibold border-b border-primary pb-1 font-sans text-xs uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70" href="#">The Collection</a>
+<a class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors font-sans text-xs uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70" href="#">Scent Profiles</a>
+<a class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors font-sans text-xs uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70" href="#">Scent Finder</a>
+<a class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors font-sans text-xs uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70" href="#">The Discovery Set</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-neutral-900 dark:text-neutral-50 hover:text-primary transition-colors" data-icon="shopping_bag">shopping_bag</button>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero PDP Section -->
+<section class="max-w-screen-2xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
+<!-- Left: Portrait Image -->
+<div class="w-full">
+<div class="aspect-[4/5] bg-surface-container-low overflow-hidden">
+<img alt="Saanjh Fragrance" class="w-full h-full object-cover" data-alt="Minimalist luxury perfume bottle on a dark marble surface with dramatic sunlight hitting the glass and amber liquid inside" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA_GW6L_ff4lYsAVuz-tRgiJ_zGcNhcqKtjqZbVMAcg45NsulJmIH9Zcqy_IoTAI50fMT9XQYrKUB10Dgm5cBe9hDZUiOc1fFNTo8aS4Y-uVp15EGF42W-wkZuIOXyC8uFYHmw_NbTlgxQExp7tPhrCYa48ivmpcwaq5nmRja4FTC-b4mKAojPNhZ10EvDhkHIx30BdQdQj_iIGxA7DbkDhkleKBkECaSnbilBa1LUo-L38CSV45qL6su7zRfgSIQI09-4vkwrc_I"/>
+</div>
+<div class="mt-8 grid grid-cols-2 gap-4">
+<div class="aspect-[4/5] bg-surface-container-low">
+<img alt="Saanjh Detail" class="w-full h-full object-cover" data-alt="Macro shot of amber perfume liquid with golden light reflections and fine mist particles in a dark elegant setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPhac3xfxs-Caa_n92GdhTLpflK2Y7Ul4l_8mcmmZmlbPOT6FLSa_Vif5MTC13YUi5q69X-C_a38WhIyg2H7q3JfEtgOGYKMf4VirjOMWi536OaPToPzXEst33k0r6GlQruVE3FAu-o3h-DRFO4c0z8jWRV74VJ8jscZQuKYYf5umUQt1i0Qe8z_D9AkwwUy1dfMgkB-rUC5w0lKeesZuaDEF7Bf9X0ovjkI0ssl4iaRHAQCE_hGjqEjoHXkdKxMp-lPpddTrFR1Y"/>
+</div>
+<div class="aspect-[4/5] bg-surface-container-low">
+<img alt="Scent Mood" class="w-full h-full object-cover" data-alt="Atmospheric shot of a warm sunset over a desert horizon with deep orange and purple hues reflecting artisanal luxury" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtMWG2qyZXgQzpzTNN9O4PTXGVHIGQYSBC8wy-AXRC_Oz9xPnF7bc_iMvzQgxJUpKkNm4-83EA1d30nJPQDuzoB3pd3yBkzWcj4yh1D2fp3jBFdhmvbYgOQ9S6ZKCpEabpLW_T6u1SQTtkLkv35XagMK6AsoMmxbIe4BPWy7V39uaOgOEh5tqa6Wa_8KWc_dappgqGlmzXMX43ARFn3y6V8_jDOP-Z5UY5jCZ6mkfdCSN0Rv3YH6SmyH3TR_QumXoycy_Y2qGkU3g"/>
+</div>
+</div>
+</div>
+<!-- Right: Sticky Product Info -->
+<div class="md:sticky md:top-32 h-fit space-y-12 pb-20">
+<div class="space-y-4">
+<p class="font-sans text-[10px] tracking-[0.3em] uppercase text-on-surface-variant">Extrait de Parfum</p>
+<h1 class="text-6xl font-serif font-bold tracking-tight text-primary uppercase">SAANJH</h1>
+<p class="text-xl font-serif italic text-on-surface-variant">"The Golden Hour in a bottle."</p>
+<p class="text-2xl font-medium">$185.00</p>
+</div>
+<div class="space-y-4">
+<p class="font-sans text-xs uppercase tracking-widest text-on-surface-variant">Select Volume</p>
+<div class="flex gap-4">
+<button class="px-8 py-3 bg-surface-container-high border-none text-xs tracking-widest uppercase transition-all duration-300 hover:bg-neutral-200">8ML</button>
+<button class="px-8 py-3 bg-primary text-on-primary text-xs tracking-widest uppercase shadow-[0_4px_12px_rgba(75,29,29,0.2)]">50ML</button>
+</div>
+</div>
+<div class="space-y-6">
+<button class="w-full bg-primary text-on-primary py-5 text-xs uppercase tracking-[0.25em] font-medium transition-all active:scale-95 duration-150">Experience the Scent</button>
+<p class="text-sm text-on-surface-variant leading-relaxed font-light">
+                        Inspired by the liminal space between day and night, SAANJH opens with a sharp burst of Saffron and Bergamot, melting into a heart of smoky Oudh and Crimson Rose. A profound base of Sandalwood and Vanilla ensures a haunting, long-lasting trail.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-8 pt-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+<span class="text-[10px] uppercase tracking-widest">Complimentary Shipping</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] uppercase tracking-widest">Discovery Credit</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Evaluation Layer: Scent Pyramid -->
+<section class="bg-surface-container-low mt-24 py-32">
+<div class="max-w-screen-2xl mx-auto px-12">
+<div class="text-center mb-20">
+<h2 class="text-4xl font-serif mb-4">The Olfactory Architecture</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto font-light">A complex evolution that unfolds on the skin over twelve hours.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Top -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="air">air</span>
+</div>
+<div>
+<h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Top Notes</h3>
+<p class="font-serif italic text-lg">Saffron, Bergamot, Pink Pepper</p>
+<p class="text-[10px] uppercase mt-2 text-on-surface-variant">Immediate Impression (0-30 mins)</p>
+</div>
+</div>
+<!-- Heart -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="favorite">favorite</span>
+</div>
+<div>
+<h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Heart Notes</h3>
+<p class="font-serif italic text-lg">Oudh, Crimson Rose, Jasmine</p>
+<p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Scent Identity (1-4 hours)</p>
+</div>
+</div>
+<!-- Base -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="grass">grass</span>
+</div>
+<div>
+<h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Base Notes</h3>
+<p class="font-serif italic text-lg">Sandalwood, Vanilla, Amber</p>
+<p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Dry Down (4-12 hours)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Scent Performance Matrix -->
+<section class="max-w-screen-2xl mx-auto px-12 py-32 grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+<div>
+<h2 class="text-4xl font-serif mb-8">Scent Performance</h2>
+<div class="space-y-10">
+<div class="space-y-3">
+<div class="flex justify-between text-xs uppercase tracking-widest">
+<span>Longevity</span>
+<span>12+ Hours</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 relative">
+<div class="absolute h-full bg-primary w-[95%]"></div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs uppercase tracking-widest">
+<span>Sillage</span>
+<span>Strong</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 relative">
+<div class="absolute h-full bg-primary w-[80%]"></div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs uppercase tracking-widest">
+<span>Authenticity</span>
+<span>Artisanal</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 relative">
+<div class="absolute h-full bg-primary w-[100%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="aspect-[4/5] bg-surface-container overflow-hidden">
+<img alt="Saffron Macro" class="w-full h-full object-cover" data-alt="Ultra high-res macro photography of vibrant red saffron threads on a dark textured ceramic surface with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCodBiVjx-kU6WkVzvunxudsVCWdf7s6fkTC_Wt7NqsKXgD1NeBX6NE8nDAKhELy0U6gjBFovOq7pBZX4JDAbfj_lNQrPpS_8_KTlejAM0H6ajWCmTnQuujytLT3Eafu7v2CUg6TAefVp_drR_lEwNcwYlqkn8QiWQcb5T-Y-lSYnRpTRKQ6jBoxXCPsuRG9pxZUbVVlM5YiDDkPo-sRybXiCyGlQsZskZF9g26d0_fyeHdM_4vcxWLSGJkGQXMWJbjiA81HzGwQW0"/>
+</div>
+</section>
+<!-- Layering Matrix -->
+<section class="bg-primary text-on-primary py-32 overflow-hidden">
+<div class="max-w-screen-2xl mx-auto px-12 flex flex-col md:flex-row gap-16 items-center">
+<div class="md:w-1/3">
+<h2 class="text-4xl font-serif mb-6">Perfect For Layering With...</h2>
+<p class="text-on-primary/70 text-sm leading-relaxed mb-8">Create a bespoke scent trail by combining SAANJH with the ethereal nodes of 'CHANDNI'. Together they create a balanced dialogue of smoke and moonlight.</p>
+<button class="border border-on-primary/20 px-8 py-4 text-[10px] uppercase tracking-[0.3em] hover:bg-on-primary hover:text-primary transition-all">Shop the Duo</button>
+</div>
+<div class="md:w-2/3 grid grid-cols-2 gap-8">
+<div class="bg-surface-container-highest/10 p-8 flex flex-col items-center text-center">
+<div class="w-32 aspect-[4/5] bg-surface mb-6">
+<img alt="Chandni Bottle" class="w-full h-full object-cover" data-alt="Minimalist white perfume bottle standing on a light stone surface with soft morning light and delicate shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXYcFzvXx44ax_eSmihDatl78xeKKpxIrQwY3-CC3hFyWL5fGKLSJ-PmXfV8fv584o9gYVNgBTkfv179CIuGj-6ok71Yd2NWhh-AL4cPPk8-cVplrOrpXXJR4DVAir8h7WaNgcvcnIMKkWNMizcNj7cCOzbmurSqieLPv0yarWKnMn3bVxwgRLcSJrLnGf6YT5CBOGY-53vSmhvVtkA33s9hQ6eFhleJZW7TxqqRPAwg1aYq96xu6-VNyXLuY5HI_oQeYjGRmc_dE"/>
+</div>
+<h4 class="font-serif italic text-lg">CHANDNI</h4>
+<p class="text-[10px] uppercase tracking-widest mt-2">White Floral &amp; Musk</p>
+</div>
+<div class="bg-white/5 p-8 flex flex-col items-center justify-center text-center border border-white/10">
+<span class="material-symbols-outlined text-4xl mb-4" data-icon="add">add</span>
+<p class="font-serif text-xl">The Midnight Collection</p>
+<p class="text-[10px] uppercase tracking-widest mt-4 opacity-70">Save 15% on the Bundle</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Reviews: The Scent Verdict -->
+<section class="max-w-screen-2xl mx-auto px-12 py-32">
+<div class="flex justify-between items-end mb-16 border-b border-outline-variant/10 pb-8">
+<div>
+<h2 class="text-4xl font-serif">The Scent Verdict</h2>
+<div class="flex gap-4 mt-6">
+<span class="px-4 py-1.5 bg-surface-container-high text-[10px] uppercase tracking-widest text-primary font-semibold">Compliment Getter</span>
+<span class="px-4 py-1.5 bg-surface-container-high text-[10px] uppercase tracking-widest text-primary font-semibold">Office Friendly</span>
+<span class="px-4 py-1.5 bg-surface-container-high text-[10px] uppercase tracking-widest text-primary font-semibold">Longevity King</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-5xl font-serif text-primary">4.9</p>
+<p class="text-[10px] uppercase tracking-widest mt-2">From 248 Curators</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="space-y-4">
+<p class="font-serif italic text-lg leading-relaxed">"A masterpiece of restraint. The Oudh is present but never overwhelming, perfectly balanced by the sweetness of vanilla."</p>
+<p class="text-[10px] uppercase tracking-widest text-primary">— Julian V.</p>
+</div>
+<div class="space-y-4">
+<p class="font-serif italic text-lg leading-relaxed">"The transition from the saffron top note to the sandalwood base is the most seamless I've ever experienced."</p>
+<p class="text-[10px] uppercase tracking-widest text-primary">— Elena M.</p>
+</div>
+<div class="space-y-4">
+<p class="font-serif italic text-lg leading-relaxed">"I wore this to a gala and was stopped four times to be asked what I was wearing. Truly exceptional projection."</p>
+<p class="text-[10px] uppercase tracking-widest text-primary">— Marcus T.</p>
+</div>
+</div>
+</section>
+<!-- Ingredient Macro Shots -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-0">
+<div class="aspect-square overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Macro close-up of dark agarwood chips with rich resinous texture and detailed wood grain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl-7Ieq5dwNRek_SSiu8dSWL8U-XvoKqvEJckA3NlPl2lv61Vm52n6w4G1dgU8bjZqalEQjMBjSa_q5HOMIXyipa_dARFGlvUpTv1TtfJArwO0UF8cj9g3MIH8Qgq1pixSHV6aPo4gadmGPCCH-JogM3GgpSmMHv9LDjDvTg8EWAkktA7IEo9n6eNN1CFbWANYUTkGsFEZihHNvriMTY2vqT59-seo5fBFwsOwQ2kUq9NoTyr2SEn6vWF72NdI4-RoEZTpi8N6BQk"/>
+</div>
+<div class="aspect-square overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Close-up macro shot of dark vanilla beans with glistening surface and intricate organic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcbXyLi-bjYiUJejckMD_sy3v2hsni8mCABEBFyBMHFzODQ97s1PWtxEkietUmRW4D6Sprh4ZwqqKh4bHPEqKjI1AUtLFNUqnFL8VbucCdruGwpy1QfGddqCVLJt49zTTWz3gMwzfpmxZ9bLp-DxFT2EAlEe_-jhxIvU-xglfpaEy7iL-f2W5uGdVPfVL_3DtM8JJNWUADvTDaL_UJuN21Zs3nvmEfHFyDNVv7iUMryUj6Og8vWAUU4RQA4htzm1O8-evuNejIKpQ"/>
+</div>
+<div class="aspect-square overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Macro photography of deep red rose petals with morning dew drops catching light in a moody atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtDJmNIi2OO_2T0Jbu-bkJ8OotxaaAhjkpB0dcjqRVNL68jtYMXDkPQ6Uz-mLaCf5dE-Xjs1gUCI_ptZlDmrYE0KoDGm-fGeUk9RpJezP-eiH0LTDzmRGvTgRRbihnaFPxpJAxmEFwZYSSNFdAVHT3s4yeT6mBfMafALDOdBWffZePHvBAWSM1d_BCm5BKUTGk59ECGKRuDATaX_KPZh9yM34pjAnJdqvdG2sDQ86L6ra0_IbE8b5zR6ivNRIl18lcepm8l6YXwrs"/>
+</div>
+<div class="aspect-square overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Macro shot of amber resin pieces glowing with internal golden light and crystalline details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBobScgOrlq9892awyknbgfpUr3GKaYVqwOydl6p5ubpYaQXmxZTMcpX6Bulds3ochN3jHLOlIkqlBF88DwjDf9nVPkiqnKNkLi0OfmU9ZMi9s13m3oshSH4Yr3ziC3JGnCbpex6NPHe1ujVKtBa4uHIL_jXY3QE5HHTZRQSxI4yvspOiMGvIsVx3th_-s6Lhgu1lian0wGNyhX5or6jk9Zu3cb83AOJbEm8GCVv1WsFQ3rgc6Hh1g2SoffaNB6R6W2pePT8BCjV44"/>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-50 dark:bg-neutral-950 w-full py-20 px-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-screen-2xl mx-auto">
+<div>
+<div class="font-serif text-xl mb-4 tracking-[0.3em] uppercase text-primary">AROMARAS</div>
+<p class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 mt-8">© 2024 AROMARAS. ALL RIGHTS RESERVED.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-sans text-[10px] tracking-widest uppercase font-bold mb-2">Company</h5>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">About Us</a>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">Loyalty</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-sans text-[10px] tracking-widest uppercase font-bold mb-2">Support</h5>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">Track Order</a>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">Customer Care</a>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-sans text-[10px] tracking-widest uppercase font-bold mb-2">Connect</h5>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">Instagram</a>
+<a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-primary transition-all duration-300 hover:tracking-[0.25em]" href="#">YouTube</a>
+</div>
+</div>
+</footer>
+<!-- SideNavBar (Bag) - Hidden by default -->
+<div class="hidden fixed right-0 h-full w-[400px] z-[100] bg-surface dark:bg-neutral-900 flex flex-col h-full p-8 shadow-2xl shadow-neutral-900/10" id="side-nav-bag">
+<div class="flex justify-between items-center mb-12">
+<div>
+<h2 class="font-serif text-lg tracking-widest uppercase">Your Bag</h2>
+<p class="font-sans text-[10px] uppercase tracking-wider text-neutral-400">Complimentary shipping on orders over $150</p>
+</div>
+<button class="material-symbols-outlined" data-icon="close">close</button>
+</div>
+<div class="flex-grow space-y-8 overflow-y-auto no-scrollbar">
+<div class="flex gap-6 items-center">
+<div class="w-20 aspect-[4/5] bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Small thumbnail of the Saanjh perfume bottle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHJmZbSmU__8vQDKRS1irfd1T0DebI7g57E9zBdTrKXxHCwBg_y5HhhUukwYXoNegRidHXy3BMHCu3KFwSNkbNvUBhbSr_0hKYFou3Hj3x9xXhH5Hwb_dB2mq6zJrPMSZtlWnVvhyv7-yOolqvCcwbLdM6xFT2AdWAruS1fDllW96alyergo21f_yp0C4QDdEKllBCca4wEqrUUcLAXZkn72VlnnAMgSQr5ESlmDS_Qmb6Fi0oH-vLWmkap7cMK4I3V_-oBwONi6g"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-serif text-sm uppercase">SAANJH</h4>
+<p class="text-[10px] uppercase text-neutral-400 mt-1">50ML / $185.00</p>
+</div>
+</div>
+</div>
+<div class="mt-12 space-y-4">
+<div class="flex justify-between font-sans text-[10px] uppercase tracking-widest">
+<span>Subtotal</span>
+<span class="text-primary font-bold">$185.00</span>
+</div>
+<button class="w-full bg-primary text-on-primary py-5 text-[10px] uppercase tracking-[0.3em] font-medium">Secure Checkout</button>
+<div class="grid grid-cols-4 gap-2 pt-4">
+<div class="flex flex-col items-center gap-2 text-primary bg-primary/5 py-3">
+<span class="material-symbols-outlined text-sm" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-neutral-400">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-neutral-400">
+<span class="material-symbols-outlined text-sm" data-icon="local_shipping">local_shipping</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-neutral-400">
+<span class="material-symbols-outlined text-sm" data-icon="payments">payments</span>
+</div>
+</div>
+</div>
+</div>
+</body></html>
