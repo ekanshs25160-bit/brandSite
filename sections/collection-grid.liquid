@@ -1,0 +1,126 @@
+<main class="pt-32 pb-24">
+  <!-- Breadcrumbs & Filter Header -->
+  <section class="px-12 mb-16">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <div class="space-y-4">
+        <nav class="flex gap-2 text-[10px] tracking-widest uppercase text-outline">
+          <a class="hover:text-brand-primary transition-colors" href="/">Home</a>
+          <span>/</span>
+          <span class="text-on-surface">{{ collection.title | default: section.settings.title }}</span>
+        </nav>
+        <h1 class="font-headline text-5xl md:text-7xl tracking-tight max-w-2xl">
+          {{ collection.title | default: section.settings.title }}
+        </h1>
+      </div>
+      <div class="flex flex-col gap-4">
+        <span class="text-[10px] tracking-widest uppercase text-outline">Filter by Mood</span>
+        <div class="flex gap-3">
+          <button class="px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Fresh</button>
+          <button class="px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Bold</button>
+          <button class="px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Elegant</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Grid: Asymmetrical Boutique Layout -->
+  <section class="px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-12">
+    {% for product in collection.products %}
+      {% assign is_offset = false %}
+      {% assign mod_index = forloop.index | modulo: 3 %}
+      {% if mod_index == 2 %}
+        {% assign is_offset = true %}
+      {% endif %}
+
+      <div class="group flex flex-col cursor-pointer {% if is_offset %}lg:translate-y-16{% endif %}">
+        <div class="relative aspect-[4/5] overflow-hidden mb-6">
+          <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 group-hover:opacity-0" 
+               src="{{ product.featured_image | image_url: width: 800 }}" 
+               alt="{{ product.title }}">
+          
+          {% if product.images[1] %}
+            <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0 group-hover:opacity-100 scale-105 group-hover:scale-100 transition-transform" 
+                 src="{{ product.images[1] | image_url: width: 800 }}" 
+                 alt="{{ product.title }} secondary">
+          {% endif %}
+
+          <div class="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+            <form method="post" action="/cart/add" class="w-full">
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+              <button type="submit" class="w-full bg-brand-primary text-white py-4 text-[11px] tracking-[0.2em] uppercase transition-transform translate-y-4 group-hover:translate-y-0 duration-500">
+                Add to Bag — {{ product.price | money }}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-headline text-2xl tracking-tight">{{ product.title }}</h3>
+          <div class="flex gap-2">
+            <span class="material-symbols-outlined text-outline text-sm">hourglass_empty</span>
+            <span class="material-symbols-outlined text-outline text-sm">dark_mode</span>
+          </div>
+        </div>
+        
+        <p class="text-[10px] tracking-widest uppercase text-outline mb-6">
+          {% for tag in product.tags limit: 3 %}
+            {{ tag }}{% unless forloop.last %}, {% endunless %}
+          {% else %}
+            Saffron, Oud, Damascus Rose
+          {% endfor %}
+        </p>
+
+        <div class="mt-auto flex gap-2">
+          {% for variant in product.variants %}
+            <button class="px-3 py-1 {% if forloop.first %}bg-brand-primary text-white{% else %}bg-surface-container-high text-on-surface hover:bg-brand-primary/10{% endif %} text-[10px] tracking-widest uppercase transition-colors">
+              {{ variant.title }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      {% comment %} Mock data if no products exist in the collection yet {% endcomment %}
+      {% for i in (1..6) %}
+        {% assign is_offset = false %}
+        {% assign mod_index = i | modulo: 3 %}
+        {% if mod_index == 2 %}
+          {% assign is_offset = true %}
+        {% endif %}
+        <div class="group flex flex-col cursor-pointer {% if is_offset %}lg:translate-y-16{% endif %}">
+          <div class="relative aspect-[4/5] overflow-hidden mb-6 bg-surface-container">
+            <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 group-hover:opacity-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNpBVAcE_XlSIf7uQy_6RLiFgqJ8YFahRRZzrZLXfldiUJPn0ZsL--qhGRD5QRVxyYE27Z1pSghBSK7K4ZVP_4MGtl3NQcGjOIY2YzdpQrP2d--mfc1EUwI3zHWUirS0rnwi1t2O2PEeQgT7hch2YIqMgpLWrhmkdoCpQYWUaKoyfKZS-5D7GCKfIbdfaaUx52-9HMu9XNhPaakvF73CuiKcuNncnVo8OHKU7gKlYTGbXMXHDmO8lImjvsQzUkB1a97aXofhpOdkA" alt="Mock product">
+            <div class="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+              <button class="w-full bg-brand-primary text-white py-4 text-[11px] tracking-[0.2em] uppercase transition-transform translate-y-4 group-hover:translate-y-0 duration-500">Add to Bag — $240</button>
+            </div>
+          </div>
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-headline text-2xl tracking-tight">Oud Sombre</h3>
+            <div class="flex gap-2">
+              <span class="material-symbols-outlined text-outline text-sm">hourglass_empty</span>
+              <span class="material-symbols-outlined text-outline text-sm">dark_mode</span>
+            </div>
+          </div>
+          <p class="text-[10px] tracking-widest uppercase text-outline mb-6">Saffron, Oud, Damascus Rose</p>
+          <div class="mt-auto flex gap-2">
+            <button class="px-3 py-1 bg-brand-primary text-white text-[10px] tracking-widest uppercase">50ML</button>
+            <button class="px-3 py-1 bg-surface-container-high text-on-surface text-[10px] tracking-widest uppercase">100ML</button>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "Aromaras Collection Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Fallback Title",
+      "default": "The Scent Wardrobe"
+    }
+  ]
+}
+{% endschema %}
