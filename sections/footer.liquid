@@ -1,57 +1,47 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+<footer class="bg-neutral-50 dark:bg-neutral-950 w-full py-20 px-12 border-t border-outline-variant/10">
+  <div class="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+    <div class="col-span-1 md:col-span-1">
+      <h2 class="font-headline text-xl mb-6 tracking-widest">{{ shop.name | uppercase }}</h2>
+      <p class="font-sans text-[10px] leading-loose text-neutral-400 uppercase tracking-widest">
+        Crafting the next chapter of Indian perfumery through a lens of global sophistication and artisanal precision.
+      </p>
+    </div>
+    <div class="col-span-1">
+      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Concierge</h3>
+      <div class="flex flex-col gap-4">
+        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">About Us</a>
+        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Loyalty</a>
+        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Track Order</a>
+      </div>
+    </div>
+    <div class="col-span-1">
+      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Follow</h3>
+      <div class="flex flex-col gap-4">
+        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Instagram</a>
+        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">YouTube</a>
+      </div>
+    </div>
+    <div class="col-span-1">
+      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Newsletter</h3>
+      <p class="font-sans text-[10px] text-neutral-400 uppercase tracking-widest mb-6 leading-relaxed">Join our inner circle for exclusive early releases.</p>
+      <div class="relative">
+        <input class="w-full bg-transparent border-b border-outline-variant py-2 text-[10px] tracking-widest font-sans focus:outline-none focus:border-primary transition-colors" placeholder="YOUR EMAIL" type="email"/>
+        <button class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-sm" data-icon="east">east</button>
+      </div>
+    </div>
   </div>
-
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+  <div class="max-w-screen-2xl mx-auto mt-20 pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between gap-6">
+    <span class="font-sans text-[10px] tracking-widest uppercase text-neutral-400">© {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. ALL RIGHTS RESERVED.</span>
+    <div class="flex gap-8">
+      <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400" href="#">Privacy Policy</a>
+      <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400" href="#">Terms of Service</a>
+    </div>
   </div>
 </footer>
 
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
-  "name": "t:general.footer",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
-    }
-  ]
+  "name": "Aromaras Footer",
+  "settings": []
 }
 {% endschema %}

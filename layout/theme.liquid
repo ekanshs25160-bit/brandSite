@@ -1,35 +1,104 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" class="light">
   <head>
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | {{ shop.name }}</title>
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
-
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-
-    {% # Social, title, etc. %}
-    {% render 'meta-tags' %}
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "primary-fixed-dim": "#c8c6c5",
+              "surface-dim": "#dadad8",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed-variant": "#5d4201",
+              "surface-bright": "#faf9f7",
+              "on-primary-fixed-variant": "#474646",
+              "surface": "#faf9f7",
+              "on-tertiary": "#ffffff",
+              "on-error": "#ffffff",
+              "primary-fixed": "#e5e2e1",
+              "on-secondary-fixed": "#261900",
+              "error": "#ba1a1a",
+              "on-background": "#1a1c1b",
+              "on-surface-variant": "#444748",
+              "surface-container-highest": "#e3e2e0",
+              "on-tertiary-fixed": "#241a0e",
+              "surface-variant": "#e3e2e0",
+              "on-tertiary-container": "#928170",
+              "on-surface": "#1a1c1b",
+              "primary-container": "#1c1b1b",
+              "background": "#faf9f7",
+              "secondary": "#775a19",
+              "inverse-surface": "#2f3130",
+              "on-secondary": "#ffffff",
+              "surface-container": "#efeeec",
+              "on-tertiary-fixed-variant": "#524436",
+              "on-primary-fixed": "#1c1b1b",
+              "on-secondary-container": "#785a1a",
+              "tertiary-fixed-dim": "#d7c3b0",
+              "primary": "#000000",
+              "outline": "#747878",
+              "secondary-fixed-dim": "#e9c176",
+              "tertiary-fixed": "#f4dfcb",
+              "inverse-on-surface": "#f1f1ef",
+              "tertiary": "#000000",
+              "secondary-container": "#fed488",
+              "surface-tint": "#5f5e5e",
+              "surface-container-high": "#e9e8e6",
+              "surface-container-lowest": "#ffffff",
+              "error-container": "#ffdad6",
+              "surface-container-low": "#f4f3f1",
+              "tertiary-container": "#241a0e",
+              "outline-variant": "#c4c7c7",
+              "inverse-primary": "#c8c6c5",
+              "secondary-fixed": "#ffdea5",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#858383"
+            },
+            "borderRadius": {
+              "DEFAULT": "0px",
+              "lg": "0px",
+              "xl": "0px",
+              "full": "9999px"
+            },
+            "fontFamily": {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+    
+    <style>
+      .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .hero-gradient {
+          background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+      }
+    </style>
 
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body class="bg-background text-on-background font-body selection:bg-secondary-container">
     {% sections 'header-group' %}
 
-    {{ content_for_layout }}
+    <main>
+      {{ content_for_layout }}
+    </main>
 
     {% sections 'footer-group' %}
   </body>

@@ -1,76 +1,31 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
-
-  <div class="header__menu">
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-12 py-6 text-neutral-900 dark:text-neutral-50">
+  <div class="flex-1 hidden md:flex gap-8 items-center">
     {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
+      <a class="{% if link.active %}text-neutral-900 border-b border-neutral-900{% else %}text-neutral-500 hover:text-neutral-900{% endif %} transition-colors font-sans text-xs uppercase tracking-[0.2em] pb-1" href="{{ link.url }}">
+        {{ link.title }}
+      </a>
     {% endfor %}
   </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+  
+  <div class="text-2xl font-headline tracking-[0.3em] text-neutral-900 dark:text-neutral-50 flex-none text-center">
+    {{ shop.name | uppercase }}
   </div>
-</header>
-
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+  
+  <div class="flex-1 flex justify-end items-center gap-6">
+    <button class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95" data-icon="shopping_bag">shopping_bag</button>
+    <button class="md:hidden material-symbols-outlined" data-icon="menu">menu</button>
+  </div>
+</nav>
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Aromaras Header",
   "settings": [
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "label": "Menu",
+      "default": "main-menu"
     }
   ]
 }
