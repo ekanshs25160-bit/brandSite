@@ -27,7 +27,14 @@
     },
     "scroller": {
       "type": "scent-wardrobe",
-      "settings": {}
+      "settings": {
+        "collections": [
+          "womens-fragrances",
+          "frontpage",
+          "combos",
+          "air-fresheners"
+        ]
+      }
     },
     "layering": {
       "type": "layering-matrix",
