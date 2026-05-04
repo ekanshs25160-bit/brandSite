@@ -1,18 +1,26 @@
 <nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-12 py-6 text-neutral-900 dark:text-neutral-50">
   <div class="flex-1 hidden md:flex gap-8 items-center">
     {% for link in section.settings.menu.links %}
-      <a class="{% if link.active %}text-neutral-900 border-b border-neutral-900{% else %}text-neutral-500 hover:text-neutral-900{% endif %} transition-colors font-sans text-xs uppercase tracking-[0.2em] pb-1" href="{{ link.url }}">
+      <a
+        class="{% if link.active %}text-neutral-900 border-b border-neutral-900{% else %}text-neutral-500 hover:text-neutral-900{% endif %} transition-colors font-sans text-xs uppercase tracking-[0.2em] pb-1"
+        href="{{ link.url }}"
+      >
         {{ link.title }}
       </a>
     {% endfor %}
   </div>
-  
+
   <div class="text-2xl font-headline tracking-[0.3em] text-neutral-900 dark:text-neutral-50 flex-none text-center">
     {{ shop.name | uppercase }}
   </div>
-  
+
   <div class="flex-1 flex justify-end items-center gap-6">
-    <button class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95" data-icon="shopping_bag">shopping_bag</button>
+    <button
+      class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
+      data-icon="shopping_bag"
+    >
+      shopping_bag
+    </button>
     <button class="md:hidden material-symbols-outlined" data-icon="menu">menu</button>
   </div>
 </nav>

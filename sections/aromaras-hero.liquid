@@ -3,7 +3,7 @@
     {% if section.settings.image %}
       <img class="w-full h-full object-cover" src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.title }}">
     {% else %}
-      <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSus100N4_8dlO7_bKdQp2zJiaE72OM9Bih_lzpz_SCKrYSSZ20sBAyc5yakKdqnfYMCUa6F6RJvRVZMq0Txt5iku3QGus4Bemk1-JlcnXOHPxWZwGVvQmwtgCKyiARClj1_WtgRMlVyIMAmoSD-itMrEcNDy6iIh67198t8fsS5IsYKHJZp6SmSBo6m3fs0pzQo64jGiuHJEEa3rAnQjuCmLAyoKJBRG1bD044sUFzYKd5YPrH-EyFizcn6B9i7WqbbmyKbUcev0" alt="Hero Image">
+      <img class="w-full h-full object-cover" src="{{ 'hero-perfume.png' | asset_url }}" alt="Hero Image">
     {% endif %}
     <div class="absolute inset-0 hero-gradient"></div>
   </div>
