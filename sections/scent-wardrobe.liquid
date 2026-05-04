@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div class="flex gap-12 overflow-x-auto hide-scrollbar px-12 pb-12">
+  <div class="flex gap-12 overflow-x-auto hide-scrollbar px-12 pb-12 max-w-screen-2xl mx-auto">
     {% for collection in section.settings.collections %}
       {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
       <div class="flex-none w-[320px] md:w-[400px] {{ margin_class }}">
