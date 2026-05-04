@@ -16,7 +16,7 @@
 
   <div class="flex gap-12 overflow-x-auto hide-scrollbar px-12 pb-12">
     {% for collection in section.settings.collections %}
-      {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20', '' %}{% endcapture %}
+      {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
       <div class="flex-none w-[320px] md:w-[400px] {{ margin_class }}">
         <div class="aspect-[4/5] bg-surface-container-highest overflow-hidden mb-6">
           {% if collection.image %}
@@ -37,7 +37,7 @@
       </div>
     {% else %}
       {% for i in (1..3) %}
-        {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20', '' %}{% endcapture %}
+        {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
         <div class="flex-none w-[320px] md:w-[400px] {{ margin_class }}">
           <div class="aspect-[4/5] bg-surface-container-highest overflow-hidden mb-6">
             {{ 'collection-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-200 text-neutral-400' }}
