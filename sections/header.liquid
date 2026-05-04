@@ -15,6 +15,22 @@
   </div>
 
   <div class="flex-1 flex justify-end items-center gap-6">
+    {% if section.settings.show_search %}
+      <button
+        class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
+        data-icon="search"
+      >
+        search
+      </button>
+    {% endif %}
+    {% if section.settings.show_wishlist %}
+      <button
+        class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
+        data-icon="favorite"
+      >
+        favorite
+      </button>
+    {% endif %}
     <button
       class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
       data-icon="shopping_bag"
@@ -34,6 +50,18 @@
       "id": "menu",
       "label": "Menu",
       "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show Search Icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show Wishlist Icon",
+      "default": true
     }
   ]
 }
