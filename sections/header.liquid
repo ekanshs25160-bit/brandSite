@@ -1,4 +1,4 @@
-<nav class="sticky top-0 w-full z-50 bg-surface/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-12 py-6 text-neutral-900 dark:text-neutral-50">
+<nav class="sticky top-0 w-full z-50 bg-surface/80 dark:bg-black/80 backdrop-blur-xl flex justify-between items-center px-4 md:px-12 py-5 md:py-6 text-neutral-900 dark:text-neutral-50">
   <div class="flex-1 hidden md:flex gap-8 items-center">
     {% for link in section.settings.menu.links %}
       <a
@@ -10,14 +10,14 @@
     {% endfor %}
   </div>
 
-  <div class="text-2xl font-headline tracking-[0.3em] text-neutral-900 dark:text-neutral-50 flex-none text-center">
+  <div class="text-xl md:text-2xl font-headline tracking-[0.3em] text-neutral-900 dark:text-neutral-50 flex-none text-center">
     {{ shop.name | uppercase }}
   </div>
 
-  <div class="flex-1 flex justify-end items-center gap-6">
+  <div class="flex-1 flex justify-end items-center gap-4 md:gap-6">
     {% if section.settings.show_search %}
       <button
-        class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
+        class="hidden md:inline-flex material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
         data-icon="search"
       >
         search
@@ -25,7 +25,7 @@
     {% endif %}
     {% if section.settings.show_wishlist %}
       <button
-        class="material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
+        class="hidden md:inline-flex material-symbols-outlined hover:opacity-70 transition-opacity duration-300 active:duration-150 scale-95"
         data-icon="favorite"
       >
         favorite
@@ -37,9 +37,65 @@
     >
       shopping_bag
     </button>
-    <button class="md:hidden material-symbols-outlined" data-icon="menu">menu</button>
+    <button class="md:hidden material-symbols-outlined" data-icon="menu" id="mobile-menu-open">menu</button>
   </div>
 </nav>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobile-menu-overlay" class="fixed inset-0 z-[100] hidden">
+  <!-- Backdrop -->
+  <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+  <!-- Drawer -->
+  <div id="mobile-menu-drawer" class="absolute top-0 right-0 h-full w-72 bg-surface shadow-2xl flex flex-col translate-x-full transition-transform duration-300 ease-out">
+    <div class="flex justify-between items-center px-6 py-6 border-b border-outline-variant/20">
+      <span class="font-headline text-lg tracking-[0.3em]">{{ shop.name | uppercase }}</span>
+      <button id="mobile-menu-close" class="material-symbols-outlined">close</button>
+    </div>
+    <nav class="flex flex-col px-6 py-8 gap-6 flex-1 overflow-y-auto">
+      {% for link in section.settings.menu.links %}
+        <a
+          class="{% if link.active %}text-neutral-900 border-b border-neutral-900{% else %}text-neutral-500 hover:text-neutral-900{% endif %} transition-colors font-sans text-xs uppercase tracking-[0.2em] pb-1 w-fit"
+          href="{{ link.url }}"
+        >
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </nav>
+    <div class="px-6 py-8 border-t border-outline-variant/20 flex gap-6">
+      {% if section.settings.show_search %}
+        <button class="material-symbols-outlined hover:opacity-70 transition-opacity" data-icon="search">search</button>
+      {% endif %}
+      {% if section.settings.show_wishlist %}
+        <button class="material-symbols-outlined hover:opacity-70 transition-opacity" data-icon="favorite">favorite</button>
+      {% endif %}
+      <button class="material-symbols-outlined hover:opacity-70 transition-opacity" data-icon="shopping_bag">shopping_bag</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    const openBtn = document.getElementById('mobile-menu-open');
+    const closeBtn = document.getElementById('mobile-menu-close');
+
+    function openMenu() {
+      overlay.classList.remove('hidden');
+      requestAnimationFrame(() => { drawer.classList.remove('translate-x-full'); });
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => { overlay.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
+    }
+
+    if (openBtn) openBtn.addEventListener('click', openMenu);
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    if (backdrop) backdrop.addEventListener('click', closeMenu);
+  })();
+</script>
 
 {% schema %}
 {

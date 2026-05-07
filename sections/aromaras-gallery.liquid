@@ -1,6 +1,6 @@
-<section class="py-32 px-12 bg-surface">
+<section class="py-16 md:py-32 px-4 md:px-12 bg-surface">
   <div class="max-w-screen-2xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-10 gap-12 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-10 gap-8 md:gap-12 items-start">
       <!-- Feature Block -->
       <div class="md:col-span-6 relative group">
         <div class="aspect-[4/5] overflow-hidden bg-surface-container">
@@ -10,8 +10,9 @@
             alt="Feature Image"
           >
         </div>
-        <div class="mt-8 md:absolute md:-bottom-12 md:-right-12 bg-white p-12 md:max-w-md shadow-2xl shadow-neutral-900/5">
-          <h2 class="font-headline text-3xl mb-4 italic">The Signature Icons</h2>
+        <!-- On mobile: static card below image. On md+: absolute overlay card -->
+        <div class="mt-6 md:mt-0 bg-white p-6 md:p-12 shadow-2xl shadow-neutral-900/5 md:absolute md:-bottom-12 md:-right-12 md:max-w-md">
+          <h2 class="font-headline text-2xl md:text-3xl mb-4 italic">The Signature Icons</h2>
           <p class="text-on-surface-variant leading-relaxed text-sm font-light mb-6">
             A curated selection of our most profound compositions, designed to leave an indelible mark on the senses.
             Crafted with rare botanicals and age-old techniques.
@@ -23,7 +24,7 @@
       </div>
 
       <!-- Secondary Stacks -->
-      <div class="md:col-span-4 flex flex-col gap-12 mt-12 md:mt-0">
+      <div class="md:col-span-4 flex flex-col gap-8 md:gap-12 md:mt-0">
         <div class="group">
           <div class="aspect-[4/5] overflow-hidden bg-surface-container">
             <img
@@ -32,7 +33,7 @@
               alt="Saffron Dusk"
             >
           </div>
-          <div class="mt-6 flex justify-between items-end">
+          <div class="mt-4 md:mt-6 flex justify-between items-end">
             <div>
               <span class="font-label text-[10px] uppercase tracking-widest text-secondary mb-1 block"
                 >Best Seller</span
@@ -51,7 +52,7 @@
               alt="Oudh Imperial"
             >
           </div>
-          <div class="mt-6 flex justify-between items-end">
+          <div class="mt-4 md:mt-6 flex justify-between items-end">
             <div>
               <span class="font-label text-[10px] uppercase tracking-widest text-secondary mb-1 block"
                 >Limited Release</span

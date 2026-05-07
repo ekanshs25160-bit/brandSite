@@ -88,6 +88,26 @@
       .hero-gradient {
           background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
       }
+
+      /* ── Global responsive utilities ── */
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      /* Smooth momentum scroll on iOS */
+      * {
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Prevent images from ever overflowing */
+      img { max-width: 100%; height: auto; }
+
+      /* Fluid section vertical spacing on small screens */
+      @media (max-width: 640px) {
+        section { word-break: break-word; }
+      }
     </style>
 
     {{ content_for_header }}

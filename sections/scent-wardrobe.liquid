@@ -1,59 +1,109 @@
-<section class="py-32 bg-surface-container-low overflow-hidden">
-  <div class="px-12 mb-20 max-w-screen-2xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
-    <div>
-      <span class="font-label text-[10px] uppercase tracking-[0.3em] text-secondary mb-4 block">Occasion-Based</span>
-      <h2 class="font-headline text-4xl md:text-5xl italic">Scent Wardrobe</h2>
-    </div>
-    <div class="flex gap-4">
-      <button class="w-12 h-12 border border-outline-variant/40 flex items-center justify-center hover:bg-white transition-colors">
-        <span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
-      </button>
-      <button class="w-12 h-12 border border-outline-variant/40 flex items-center justify-center hover:bg-white transition-colors">
-        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
-      </button>
-    </div>
+<section class="py-20 md:py-32 bg-surface-container-low overflow-hidden">
+  <!-- Section header — arrows removed from here -->
+  <div class="px-4 md:px-12 mb-12 md:mb-20 max-w-screen-2xl mx-auto">
+    <span class="font-label text-[10px] uppercase tracking-[0.3em] text-secondary mb-4 block">Occasion-Based</span>
+    <h2 class="font-headline text-4xl md:text-5xl italic">Scent Wardrobe</h2>
   </div>
 
-  <div class="flex gap-12 overflow-x-auto hide-scrollbar px-12 pb-12 max-w-screen-2xl mx-auto">
-    {% for collection in section.settings.collections %}
-      {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
-      <div class="flex-none w-[320px] md:w-[400px] {{ margin_class }}">
-        <div class="aspect-[4/5] bg-surface-container-highest overflow-hidden mb-6">
-          {% if collection.image %}
-            <img class="w-full h-full object-cover" src="{{ collection.image | image_url: width: 600 }}" alt="{{ collection.title }}">
-          {% elsif collection.products.first.featured_image %}
-            <img class="w-full h-full object-cover" src="{{ collection.products.first.featured_image | image_url: width: 600 }}" alt="{{ collection.title }}">
-          {% else %}
-            {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-200 text-neutral-400' }}
-          {% endif %}
-        </div>
-        <h3 class="font-headline text-2xl mb-2">{{ collection.title }}</h3>
-        <p class="text-on-surface-variant font-light text-sm mb-6">
-          {{ collection.description | strip_html | truncatewords: 15 }}
-        </p>
-        <a href="{{ collection.url }}" class="text-primary font-label text-[10px] uppercase tracking-widest border-b border-primary pb-1 inline-block">
-          Shop Series
-        </a>
-      </div>
-    {% else %}
-      {% for i in (1..3) %}
+  <!-- Scroller wrapper: side arrows appear on hover -->
+  <div class="relative group/scroller" id="scent-wardrobe-wrapper">
+
+    <!-- Left arrow -->
+    <button
+      id="sw-prev"
+      class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-14 h-14 bg-white/90 backdrop-blur-sm shadow-lg border border-outline-variant/20 items-center justify-center
+             opacity-0 -translate-x-2 pointer-events-none
+             group-hover/scroller:opacity-100 group-hover/scroller:translate-x-0 group-hover/scroller:pointer-events-auto
+             transition-all duration-300 ease-out
+             hover:bg-white hover:shadow-xl"
+      aria-label="Scroll left"
+    >
+      <span class="material-symbols-outlined text-base">arrow_back</span>
+    </button>
+
+    <!-- Right arrow -->
+    <button
+      id="sw-next"
+      class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-14 h-14 bg-white/90 backdrop-blur-sm shadow-lg border border-outline-variant/20 items-center justify-center
+             opacity-0 translate-x-2 pointer-events-none
+             group-hover/scroller:opacity-100 group-hover/scroller:translate-x-0 group-hover/scroller:pointer-events-auto
+             transition-all duration-300 ease-out
+             hover:bg-white hover:shadow-xl"
+      aria-label="Scroll right"
+    >
+      <span class="material-symbols-outlined text-base">arrow_forward</span>
+    </button>
+
+    <!-- Scroll track -->
+    <div id="sw-track" class="flex gap-6 md:gap-12 overflow-x-auto hide-scrollbar px-4 md:px-12 pb-8 md:pb-12 max-w-screen-2xl mx-auto scroll-smooth">
+      {% for collection in section.settings.collections %}
         {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
-        <div class="flex-none w-[320px] md:w-[400px] {{ margin_class }}">
+        <div class="flex-none w-[260px] sm:w-[300px] md:w-[400px] {{ margin_class }}">
           <div class="aspect-[4/5] bg-surface-container-highest overflow-hidden mb-6">
-            {{ 'collection-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-200 text-neutral-400' }}
+            {% if collection.image %}
+              <img class="w-full h-full object-cover" src="{{ collection.image | image_url: width: 600 }}" alt="{{ collection.title }}">
+            {% elsif collection.products.first.featured_image %}
+              <img class="w-full h-full object-cover" src="{{ collection.products.first.featured_image | image_url: width: 600 }}" alt="{{ collection.title }}">
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-200 text-neutral-400' }}
+            {% endif %}
           </div>
-          <h3 class="font-headline text-2xl mb-2">Collection Title</h3>
+          <h3 class="font-headline text-2xl mb-2">{{ collection.title }}</h3>
           <p class="text-on-surface-variant font-light text-sm mb-6">
-            Add a description to your collection to display it here.
+            {{ collection.description | strip_html | truncatewords: 15 }}
           </p>
-          <a href="#" class="text-primary font-label text-[10px] uppercase tracking-widest border-b border-primary pb-1 inline-block">
+          <a href="{{ collection.url }}" class="text-primary font-label text-[10px] uppercase tracking-widest border-b border-primary pb-1 inline-block">
             Shop Series
           </a>
         </div>
+      {% else %}
+        {% for i in (1..3) %}
+          {% capture margin_class %}{% cycle '', 'mt-10 md:mt-20' %}{% endcapture %}
+          <div class="flex-none w-[260px] sm:w-[300px] md:w-[400px] {{ margin_class }}">
+            <div class="aspect-[4/5] bg-surface-container-highest overflow-hidden mb-6">
+              {{ 'collection-' | append: i | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-200 text-neutral-400' }}
+            </div>
+            <h3 class="font-headline text-2xl mb-2">Collection Title</h3>
+            <p class="text-on-surface-variant font-light text-sm mb-6">
+              Add a description to your collection to display it here.
+            </p>
+            <a href="#" class="text-primary font-label text-[10px] uppercase tracking-widest border-b border-primary pb-1 inline-block">
+              Shop Series
+            </a>
+          </div>
+        {% endfor %}
       {% endfor %}
-    {% endfor %}
+    </div>
   </div>
 </section>
+
+<script>
+  (function () {
+    const track = document.getElementById('sw-track');
+    const prev  = document.getElementById('sw-prev');
+    const next  = document.getElementById('sw-next');
+    if (!track || !prev || !next) return;
+
+    const SCROLL_AMOUNT = 440; // px per click
+
+    prev.addEventListener('click', () => {
+      track.scrollBy({ left: -SCROLL_AMOUNT, behavior: 'smooth' });
+    });
+
+    next.addEventListener('click', () => {
+      track.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
+    });
+
+    // Update arrow visibility based on scroll position
+    function updateArrows() {
+      prev.style.visibility = track.scrollLeft <= 4 ? 'hidden' : '';
+      next.style.visibility = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4 ? 'hidden' : '';
+    }
+
+    track.addEventListener('scroll', updateArrows, { passive: true });
+    updateArrows(); // run once on load
+  })();
+</script>
 
 {% schema %}
 {
