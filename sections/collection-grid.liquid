@@ -1,113 +1,130 @@
-<main class="pt-24 md:pt-32 pb-16 md:pb-24">
-  <!-- Breadcrumbs & Filter Header -->
-  <section class="px-4 md:px-12 mb-10 md:mb-16">
-    <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-      <div class="space-y-4">
-        <nav class="flex gap-2 text-[10px] tracking-widest uppercase text-outline">
-          <a class="hover:text-brand-primary transition-colors" href="/">Home</a>
-          <span>/</span>
-          <span class="text-on-surface">{{ collection.title | default: section.settings.title }}</span>
-        </nav>
-        <h1 class="font-headline text-4xl sm:text-5xl md:text-7xl tracking-tight max-w-2xl">
-          {{ collection.title | default: section.settings.title }}
-        </h1>
-      </div>
-      <div class="flex flex-col gap-4">
-        <span class="text-[10px] tracking-widest uppercase text-outline">Filter by Mood</span>
-        <div class="flex flex-wrap gap-2 md:gap-3">
-          <button class="px-4 md:px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Fresh</button>
-          <button class="px-4 md:px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Bold</button>
-          <button class="px-4 md:px-6 py-2 bg-surface-container-high hover:bg-brand-primary hover:text-white transition-colors text-[11px] tracking-widest uppercase">Elegant</button>
-        </div>
-      </div>
+<main class="flex-grow w-full">
+  <!-- 1. Editorial Header -->
+  <section class="relative w-full h-[500px] md:h-[614px] flex items-center justify-center overflow-hidden bg-black">
+    {% if collection.image %}
+      <img src="{{ collection.image | image_url: width: 2000 }}" alt="{{ collection.title }}" class="absolute inset-0 w-full h-full sensory-image opacity-60 mix-blend-luminosity">
+    {% else %}
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsTnlgWTbDd7-ci_m331YFtPA7v3JeCRuYgUpTyEvVGqwfTKKwZsmwEUn9Ozdh12esTDOlb_GSpY4AhlSOs_HpPXXyHwMTZRDgevUXMViv4LoTSGSsJBzhv2fVxABjMr09uwB2_Doea0P9c7a6Ki3Zi_Vpxf79v1zTRqVZNpHomOQdORS_BeRcXryL2H17nQexODvOilg4zXx4KPuX8GpMcb-b0UTdOwLiPQ3RV0zUmPMIrR6pobueF9FpMzRzZd4GTbEE1gzswjk" alt="Fallback" class="absolute inset-0 w-full h-full sensory-image opacity-60 mix-blend-luminosity">
+    {% endif %}
+    <div class="relative z-10 text-center px-4 md:px-12 max-w-4xl mx-auto flex flex-col items-center gap-6">
+      <h1 class="font-headline text-4xl sm:text-6xl md:text-8xl text-white text-center uppercase tracking-tighter italic" style="font-family: 'EB Garamond', serif;">
+        {{ collection.title | default: section.settings.title }}
+      </h1>
+      <p class="font-body text-base md:text-lg text-white/80 text-center max-w-2xl font-light">
+        {{ collection.description | default: "An exploration of olfactive shadows. These extraits de parfum are crafted for the hours where secrecy reigns and the air grows heavy with untold narratives." }}
+      </p>
     </div>
   </section>
 
-  <!-- Product Grid: Asymmetrical Boutique Layout -->
-  <section class="px-4 md:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 md:gap-y-20 gap-x-6 md:gap-x-12">
-    {% for product in collection.products %}
-      {% assign is_offset = false %}
-      {% assign mod_index = forloop.index | modulo: 3 %}
-      {% if mod_index == 2 %}
-        {% assign is_offset = true %}
-      {% endif %}
+  <!-- 2. 'Aura' Filter Bar -->
+  <div class="sticky top-[72px] md:top-[89px] z-40 bg-surface border-b border-outline-variant/30 w-full py-4 px-4 md:px-12 flex justify-between items-center hide-scrollbar overflow-x-auto">
+    <div class="flex gap-12 min-w-max mx-auto max-w-screen-2xl w-full">
+      <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase" style="font-family: 'Montserrat', sans-serif;">FILTER BY:</span>
+      <button class="font-label text-[10px] text-primary hover:text-secondary transition-colors tracking-[0.2em] uppercase" style="font-family: 'Montserrat', sans-serif;">SCENT IDENTITY</button>
+      <button class="font-label text-[10px] text-on-surface-variant hover:text-secondary transition-colors tracking-[0.2em] uppercase" style="font-family: 'Montserrat', sans-serif;">INTENSITY</button>
+      <button class="font-label text-[10px] text-on-surface-variant hover:text-secondary transition-colors tracking-[0.2em] uppercase" style="font-family: 'Montserrat', sans-serif;">MOMENT</button>
+    </div>
+    <div class="min-w-max pl-8">
+      <span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase" style="font-family: 'Montserrat', sans-serif;">
+        {{ collection.products_count | default: 4 }} EXTRAITS
+      </span>
+    </div>
+  </div>
 
-      <div class="group flex flex-col cursor-pointer {% if is_offset %}lg:translate-y-16{% endif %}">
-        <div class="relative aspect-[4/5] overflow-hidden mb-6">
-          <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 group-hover:opacity-0" 
-               src="{{ product.featured_image | image_url: width: 800 }}" 
-               alt="{{ product.title }}">
+  <!-- 3. Gallery Grid -->
+  <section class="max-w-screen-2xl mx-auto px-4 md:px-12 py-20 md:py-32 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 md:gap-y-32">
+      {% for product in collection.products %}
+        {% assign mod_index = forloop.index0 | modulo: 3 %}
+        <article class="flex flex-col group cursor-pointer {% if mod_index == 1 %}lg:mt-24{% elsif mod_index == 2 %}lg:mt-48{% endif %}">
+          <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest mb-6">
+            <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-in-out sensory-image">
+            
+            <div class="absolute bottom-4 left-4 flex gap-2">
+              {% if product.tags contains '12H+' or product.tags contains 'Long Lasting' %}
+                <div class="backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1 text-white font-label text-[9px] tracking-widest uppercase" style="font-family: 'Montserrat', sans-serif;">
+                  12H+ STAY
+                </div>
+              {% endif %}
+              <div class="backdrop-blur-md bg-black/40 border border-white/10 px-3 py-1 text-white font-label text-[9px] tracking-widest uppercase" style="font-family: 'Montserrat', sans-serif;">
+                {{ product.tags.first | default: "MIDNIGHT" }}
+              </div>
+            </div>
+          </div>
           
-          {% if product.images[1] %}
-            <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0 group-hover:opacity-100 scale-105 group-hover:scale-100 transition-transform" 
-                 src="{{ product.images[1] | image_url: width: 800 }}" 
-                 alt="{{ product.title }} secondary">
-          {% endif %}
+          <div class="flex justify-between items-start w-full">
+            <div class="flex flex-col gap-1">
+              <h3 class="font-headline text-2xl text-on-surface" style="font-family: 'EB Garamond', serif;">{{ product.title }}</h3>
+              <p class="font-body text-sm text-on-surface-variant">
+                {% for tag in product.tags limit: 3 %}
+                  {{ tag }}{% unless forloop.last %}, {% endunless %}
+                {% else %}
+                  Oud, Black Rose, Smoked Leather
+                {% endfor %}
+              </p>
+            </div>
+            <span class="font-label text-sm text-secondary">{{ product.price | money }}</span>
+          </div>
 
-          <div class="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+          <div class="mt-6 border border-outline-variant/30 hover:border-secondary transition-colors">
             <form method="post" action="/cart/add" class="w-full">
               <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-              <button type="submit" class="w-full bg-brand-primary text-white py-4 text-[11px] tracking-[0.2em] uppercase transition-transform translate-y-4 group-hover:translate-y-0 duration-500">
-                Add to Bag — {{ product.price | money }}
+              <button type="submit" class="w-full py-4 bg-transparent text-on-surface font-label text-[10px] tracking-[0.2em] uppercase flex items-center justify-center gap-2" style="font-family: 'Montserrat', sans-serif;">
+                <span>QUICK ACQUIRE</span>
+                <span class="material-symbols-outlined text-base">add</span>
               </button>
             </form>
           </div>
-        </div>
-
-        <div class="flex justify-between items-start mb-2">
-          <h3 class="font-headline text-2xl tracking-tight">{{ product.title }}</h3>
-          <div class="flex gap-2">
-            <span class="material-symbols-outlined text-outline text-sm">hourglass_empty</span>
-            <span class="material-symbols-outlined text-outline text-sm">dark_mode</span>
-          </div>
-        </div>
-        
-        <p class="text-[10px] tracking-widest uppercase text-outline mb-6">
-          {% for tag in product.tags limit: 3 %}
-            {{ tag }}{% unless forloop.last %}, {% endunless %}
-          {% else %}
-            Saffron, Oud, Damascus Rose
-          {% endfor %}
-        </p>
-
-        <div class="mt-auto flex gap-2">
-          {% for variant in product.variants %}
-            <button class="px-3 py-1 {% if forloop.first %}bg-brand-primary text-white{% else %}bg-surface-container-high text-on-surface hover:bg-brand-primary/10{% endif %} text-[10px] tracking-widest uppercase transition-colors">
-              {{ variant.title }}
-            </button>
-          {% endfor %}
-        </div>
-      </div>
-    {% else %}
-      {% comment %} Mock data if no products exist in the collection yet {% endcomment %}
-      {% for i in (1..6) %}
-        {% assign is_offset = false %}
-        {% assign mod_index = i | modulo: 3 %}
-        {% if mod_index == 2 %}
-          {% assign is_offset = true %}
-        {% endif %}
-        <div class="group flex flex-col cursor-pointer {% if is_offset %}lg:translate-y-16{% endif %}">
-          <div class="relative aspect-[4/5] overflow-hidden mb-6 bg-surface-container">
-            <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 group-hover:opacity-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNpBVAcE_XlSIf7uQy_6RLiFgqJ8YFahRRZzrZLXfldiUJPn0ZsL--qhGRD5QRVxyYE27Z1pSghBSK7K4ZVP_4MGtl3NQcGjOIY2YzdpQrP2d--mfc1EUwI3zHWUirS0rnwi1t2O2PEeQgT7hch2YIqMgpLWrhmkdoCpQYWUaKoyfKZS-5D7GCKfIbdfaaUx52-9HMu9XNhPaakvF73CuiKcuNncnVo8OHKU7gKlYTGbXMXHDmO8lImjvsQzUkB1a97aXofhpOdkA" alt="Mock product">
-            <div class="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <button class="w-full bg-brand-primary text-white py-4 text-[11px] tracking-[0.2em] uppercase transition-transform translate-y-4 group-hover:translate-y-0 duration-500">Add to Bag — $240</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-start mb-2">
-            <h3 class="font-headline text-2xl tracking-tight">Oud Sombre</h3>
-            <div class="flex gap-2">
-              <span class="material-symbols-outlined text-outline text-sm">hourglass_empty</span>
-              <span class="material-symbols-outlined text-outline text-sm">dark_mode</span>
-            </div>
-          </div>
-          <p class="text-[10px] tracking-widest uppercase text-outline mb-6">Saffron, Oud, Damascus Rose</p>
-          <div class="mt-auto flex gap-2">
-            <button class="px-3 py-1 bg-brand-primary text-white text-[10px] tracking-widest uppercase">50ML</button>
-            <button class="px-3 py-1 bg-surface-container-high text-on-surface text-[10px] tracking-widest uppercase">100ML</button>
-          </div>
-        </div>
+        </article>
+      {% else %}
+        {% for i in (0..5) %}
+          {% assign mod_index = i | modulo: 3 %}
+          <article class="flex flex-col group cursor-pointer {% if mod_index == 1 %}lg:mt-24{% elsif mod_index == 2 %}lg:mt-48{% endif %}">
+             <div class="relative w-full aspect-[3/4] overflow-hidden bg-surface-container-highest mb-6">
+               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAa9yFwSO7dQxbqacDklGb0P9OEFK7EhiBtm1tM2Udsxd0WOi5O4aRnxh2739fwK3XgCZEjVNjLVCNoeRarLPMVTjGAp1WKuNnNkWNmV-lGqlzpV7O3DhrL3pC2Al2bGxO00oWW-ryLLGVbH9sKeOrZ8K0AzRRpr9kMaa2BKpUKnoH2UyG_nUrwfSLdgYSpbzMerM4VssaUucqQfHD_VgQ2TtB5yo0kJmiWLL94hE76120qopqPE_SMjsmCy3IyAjHMkr24a0oS7M" class="w-full h-full object-cover sensory-image">
+               <div class="absolute bottom-4 left-4 flex gap-2">
+                <div class="backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1 text-white font-label text-[9px] tracking-widest uppercase" style="font-family: 'Montserrat', sans-serif;">
+                  12H+ STAY
+                </div>
+                <div class="backdrop-blur-md bg-black/40 border border-white/10 px-3 py-1 text-white font-label text-[9px] tracking-widest uppercase" style="font-family: 'Montserrat', sans-serif;">
+                  MIDNIGHT
+                </div>
+              </div>
+             </div>
+             <div class="flex justify-between items-start w-full">
+               <div class="flex flex-col gap-1">
+                 <h3 class="font-headline text-2xl text-on-surface" style="font-family: 'EB Garamond', serif;">NOCTURNE VEIL</h3>
+                 <p class="font-body text-sm text-on-surface-variant">Oud, Black Rose, Smoked Leather</p>
+               </div>
+               <span class="font-label text-sm text-secondary">$320</span>
+             </div>
+             <div class="mt-6 border border-outline-variant/30 hover:border-secondary transition-colors">
+                <button class="w-full py-4 bg-transparent text-on-surface font-label text-[10px] tracking-[0.2em] uppercase flex items-center justify-center gap-2" style="font-family: 'Montserrat', sans-serif;">
+                  <span>QUICK ACQUIRE</span>
+                  <span class="material-symbols-outlined text-base">add</span>
+                </button>
+             </div>
+          </article>
+        {% endfor %}
       {% endfor %}
-    {% endfor %}
+    </div>
+  </section>
+
+  <!-- 4. Mood Block -->
+  <section class="w-full relative h-[600px] md:h-[800px] flex items-center overflow-hidden">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC14gLJt7Y4AEIBRicI-uQ-cI5tufstaKuNt0e6BUYWGxOaommSdq5_44BiaauOtXGYpceHK92VDbRfdKtLaGAjQos7GDy9JC-hgLyMo-zXLh5K4_PC4fOsojV4Ie2ml4SzmuHbsq9AlbGsPP4E68XconuzwAHyqDUExH_qj2r-_rrEUs7G4sOcV-4OwJ5l5YBK8kUCq1cjIdyf2LjBVDPMwddcPvBtLmQuL6qTbcCpHYa3nWXVoifQIw2dPGkMvJ4ExYQOYRtzsn0" alt="Mood" class="absolute inset-0 w-full h-full object-cover sensory-image">
+    <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
+    <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-4 md:px-12">
+      <div class="max-w-2xl">
+        <span class="font-label text-[10px] text-secondary mb-6 block tracking-[0.3em] uppercase" style="font-family: 'Montserrat', sans-serif;">THE RAW ESSENCE</span>
+        <h2 class="font-headline text-4xl md:text-6xl text-white leading-tight italic" style="font-family: 'EB Garamond', serif;">
+          "We do not capture scents; we architect memories in the dark."
+        </h2>
+        <p class="font-body text-lg text-white/70 mt-8 font-light">
+          The Midnight Series relies on the rarest extractions—saffron harvested under the moon, aged Cambodian oud, and absolute of black rose. Ingredients that demand patience.
+        </p>
+      </div>
+    </div>
   </section>
 </main>
 
@@ -119,7 +136,7 @@
       "type": "text",
       "id": "title",
       "label": "Fallback Title",
-      "default": "The Scent Wardrobe"
+      "default": "The Midnight Series"
     }
   ]
 }

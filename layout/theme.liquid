@@ -6,7 +6,7 @@
     <title>{{ page_title }} | {{ shop.name }}</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
     <script id="tailwind-config">
@@ -87,6 +87,10 @@
       .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       .hero-gradient {
           background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+      }
+      .sensory-image {
+          object-fit: cover;
+          filter: contrast(1.05) saturate(0.95) sepia(0.05);
       }
 
       /* ── Global responsive utilities ── */
