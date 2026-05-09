@@ -1,0 +1,226 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --wardrobe-bg: {{ section.settings.bg_color }};
+    --wardrobe-text: {{ section.settings.text_color }};
+    --wardrobe-accent: {{ section.settings.accent_color }};
+    --wardrobe-card-bg: {{ section.settings.card_bg_color }};
+    --wardrobe-offset: {{ section.settings.vertical_offset }}px;
+  }
+
+  .wardrobe-grid {
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, minmax(0, 1fr));
+  }
+
+  @media (min-width: 768px) {
+    .wardrobe-grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+    }
+  }
+
+  {% if section.settings.enable_asymmetry %}
+    @media (min-width: 1024px) {
+      .wardrobe-item:nth-child(3n+1), 
+      .wardrobe-item:nth-child(3n+3) {
+        margin-top: var(--wardrobe-offset);
+      }
+      .wardrobe-item:nth-child(3n+2) {
+        margin-top: calc(var(--wardrobe-offset) * -1);
+      }
+    }
+  {% endif %}
+{% endstyle %}
+
+<!-- 1. Breadcrumbs and Title -->
+<section class="pt-24 pb-12 px-4 md:px-12 max-w-screen-2xl mx-auto" style="background-color: var(--wardrobe-bg); color: var(--wardrobe-text);">
+  {% if section.settings.show_breadcrumbs %}
+    <nav class="flex items-center gap-2 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="font-label text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">Home</a>
+      <span class="opacity-30 text-[10px]">/</span>
+      <span class="font-label text-[10px] uppercase tracking-widest" style="color: var(--wardrobe-accent);">Collections</span>
+    </nav>
+  {% endif %}
+
+  <div class="flex flex-col md:flex-row justify-between items-end gap-8">
+    <h1 class="font-headline {{ section.settings.title_size }} {% if section.settings.italic_title %}italic{% endif %} leading-none">
+      {{ section.settings.title | default: "The Collections" }}
+    </h1>
+  </div>
+</section>
+
+<!-- 2. Collection Grid -->
+<section class="max-w-screen-2xl mx-auto px-4 md:px-12 py-12 md:py-20">
+  <div class="grid wardrobe-grid gap-x-12 gap-y-24 md:gap-y-32">
+    {% for collection in collections %}
+      <article class="flex flex-col group wardrobe-item">
+        <a href="{{ collection.url }}" class="block mb-8 relative overflow-hidden" style="aspect-ratio: {{ section.settings.image_aspect_ratio }}; background-color: var(--wardrobe-card-bg);">
+          {% if collection.featured_image %}
+            <img 
+              src="{{ collection.featured_image | image_url: width: 800 }}" 
+              alt="{{ collection.title }}" 
+              class="w-full h-full object-cover grayscale-0 group-hover:grayscale-[0.2] transition-all duration-700"
+            >
+          {% else %}
+            <div class="w-full h-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant/20">
+               {{ 'collection-1' | placeholder_svg_tag: 'w-24 h-24' }}
+            </div>
+          {% endif %}
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+          
+          <div class="absolute bottom-6 left-6 right-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+             <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-label uppercase tracking-widest text-primary">Explore Series</span>
+             </div>
+          </div>
+        </a>
+
+        <div class="flex flex-col gap-4">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-headline text-3xl group-hover:italic transition-all duration-300">
+              <a href="{{ collection.url }}">{{ collection.title }}</a>
+            </h3>
+            <span class="font-label text-[10px] opacity-40">({{ collection.products_count }} Products)</span>
+          </div>
+
+          {% if collection.description != blank and section.settings.show_descriptions %}
+            <p class="font-label text-[10px] uppercase tracking-[0.2em] opacity-60 leading-relaxed max-w-sm">
+              {{ collection.description | strip_html | truncatewords: 20 }}
+            </p>
+          {% endif %}
+
+          <a href="{{ collection.url }}" class="mt-4 font-label text-[10px] uppercase tracking-[0.3em] text-primary border-b border-primary/20 pb-1 w-fit hover:border-primary transition-all">
+            View Collection
+          </a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wardrobe Collections List",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Title",
+      "default": "The Collections"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 3,
+      "step": 1,
+      "label": "Columns (Desktop)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "label": "Columns (Mobile)",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_asymmetry",
+      "label": "Enable Asymmetrical Grid",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "vertical_offset",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Vertical Offset Amount",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Typography & Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#faf9f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1a1c1b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#775a19"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Placeholder Background",
+      "default": "#f4f3f1"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "text-4xl md:text-5xl", "label": "Small" },
+        { "value": "text-5xl md:text-7xl", "label": "Medium" },
+        { "value": "text-6xl md:text-9xl", "label": "Large" }
+      ],
+      "default": "text-5xl md:text-7xl"
+    },
+    {
+      "type": "checkbox",
+      "id": "italic_title",
+      "label": "Italicize Title",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show Breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_descriptions",
+      "label": "Show Descriptions",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "4/5", "label": "Portrait (4:5)" },
+        { "value": "3/4", "label": "Portrait (3:4)" },
+        { "value": "1/1", "label": "Square (1:1)" }
+      ],
+      "default": "4/5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wardrobe Collections List"
+    }
+  ]
+}
+{% endschema %}
