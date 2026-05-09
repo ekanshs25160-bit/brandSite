@@ -1,6 +1,697 @@
+{% doc %}
+  @prompt
+    The Master Shopify AI Prompt: 'The Scent Wardrobe' (PLP) v2 Architect
+    Role: Act as a Lead Shopify Theme Developer.
+    Objective: Rebuild the Collections Page (collection.liquid) into the Aromaras Scent Wardrobe (PLP) v2 layout.
+    
+    CRITICAL INSTRUCTIONS:
+    
+    Visibility: You MUST include a presets block in the schema: "presets": [{"name": "Aromaras Scent Wardrobe v2"}].
+    
+    Zero Hardcoding: Tie every color, font, and text element to section.settings.
+    
+    Stitch Aesthetic: Mirror the ID: f334537978cd402680b9a5a30877a728 layout—specifically the architectural spacing and the high-end editorial typography.
+    
+    1. Header & Atmospheric Entry (Customizable)
+    Editorial Header: Create a medium-height section (45vh) that pulls the collection image as a background.
+    
+    Overlay: Apply a subtle dark gradient at the bottom (0% to 20% opacity) for text legibility.
+    
+    Typography: * Title: Centered, Cormorant Garamond, Maroon (#2D004B), with wide letter-spacing.
+    
+    Scent Essay: Display the collection description below the title in Montserrat, styled as an editorial introduction (Max-width: 600px).
+    
+    2. The Gallery Grid (Discovery Logic)
+    Structure: A 3-column asymmetrical grid on desktop that collapses to a 1.5-card 'peek' slider on mobile.
+    
+    Grid Spacing: Add a schema slider for Grid Gap (Default: 48px) to maintain the airy Stitch vibe.
+    
+    Product Card Architecture:
+    
+    The Flip: Feature the studio bottle shot as primary and the lifestyle 'Aura' shot as secondary, crossfading on hover (0.5s duration).
+    
+    Performance Badges: Overlay two minimalist pill-shaped badges in the bottom-left of the image:
+    
+    Badge 1: ⏳ + product.metafields.performance.longevity
+    
+    Badge 2: 🌙 + product.metafields.performance.occasion
+    
+    Card Body: Product Title in Serif Maroon, Price in Montserrat Gold.
+    
+    3. 'Aura' Filter & Discovery Tools
+    Sticky Filter Bar: Implement a thin, minimalist horizontal bar below the header.
+    
+    Filter Types: Enable filtering by 'Scent Identity' (e.g., Oud, Fresh, Floral) and 'Intensity' using Shopify's standard tag or metafield filtering logic.
+    
+    CTA: A 'Quick Acquire' ghost button with a 1px gold border that appears only on hover.
+    
+    4. Technical Implementation
+    CSS Variables: Use CSS variables linked to the schema settings for --bg-cream: #F9F5F1, --brand-maroon: #2D004B, and --brand-gold: #D4AF37.
+    
+    Scoped Styling: Ensure all styles are scoped to #Aromaras-PLP-{{ section.id }} to prevent conflicts with other pages.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  :root {
+    --aromaras-bg-cream-{{ ai_gen_id }}: {{ block.settings.bg_cream }};
+    --aromaras-brand-maroon-{{ ai_gen_id }}: {{ block.settings.brand_maroon }};
+    --aromaras-brand-gold-{{ ai_gen_id }}: {{ block.settings.brand_gold }};
+    --aromaras-overlay-opacity-{{ ai_gen_id }}: {{ block.settings.overlay_opacity }};
+    --aromaras-grid-gap-{{ ai_gen_id }}: {{ block.settings.grid_gap }}px;
+  }
+
+  .aromaras-plp-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: var(--aromaras-bg-cream-{{ ai_gen_id }});
+  }
+
+  .aromaras-plp-header-{{ ai_gen_id }} {
+    position: relative;
+    height: {{ block.settings.header_height }}vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .aromaras-plp-header-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, var(--aromaras-overlay-opacity-{{ ai_gen_id }})) 100%);
+    pointer-events: none;
+  }
+
+  .aromaras-plp-header-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 800px;
+  }
+
+  .aromaras-plp-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+    font-weight: {{ block.settings.title_font.weight }};
+    font-style: {{ block.settings.title_font.style }};
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-size: {{ block.settings.title_size }}px;
+    letter-spacing: {{ block.settings.title_letter_spacing }}px;
+    margin: 0 0 20px;
+    line-height: 1.2;
+  }
+
+  .aromaras-plp-description-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-weight: {{ block.settings.body_font.weight }};
+    font-style: {{ block.settings.body_font.style }};
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-size: {{ block.settings.description_size }}px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .aromaras-plp-filter-bar-{{ ai_gen_id }} {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--aromaras-bg-cream-{{ ai_gen_id }});
+    border-bottom: 1px solid rgba(45, 0, 75, 0.1);
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .aromaras-plp-filter-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .aromaras-plp-filter-label-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 14px;
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-weight: 500;
+  }
+
+  .aromaras-plp-filter-select-{{ ai_gen_id }} {
+    padding: 8px 12px;
+    border: 1px solid var(--aromaras-brand-gold-{{ ai_gen_id }});
+    background-color: transparent;
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .aromaras-plp-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--aromaras-grid-gap-{{ ai_gen_id }});
+    padding: 60px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .aromaras-plp-card-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .aromaras-plp-card-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: #f4f4f4;
+  }
+
+  .aromaras-plp-card-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+  }
+
+  .aromaras-plp-card-image-primary-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+  }
+
+  .aromaras-plp-card-image-secondary-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .aromaras-plp-card-{{ ai_gen_id }}:hover .aromaras-plp-card-image-primary-{{ ai_gen_id }} {
+    opacity: 0;
+  }
+
+  .aromaras-plp-card-{{ ai_gen_id }}:hover .aromaras-plp-card-image-secondary-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .aromaras-plp-card-badges-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .aromaras-plp-badge-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: rgba(249, 245, 241, 0.95);
+    border-radius: 20px;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 12px;
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+  }
+
+  .aromaras-plp-card-body-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aromaras-plp-card-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+    font-weight: {{ block.settings.title_font.weight }};
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-size: {{ block.settings.card_title_size }}px;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .aromaras-plp-card-price-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    color: var(--aromaras-brand-gold-{{ ai_gen_id }});
+    font-size: {{ block.settings.card_price_size }}px;
+    font-weight: 600;
+  }
+
+  .aromaras-plp-card-cta-{{ ai_gen_id }} {
+    margin-top: 8px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid var(--aromaras-brand-gold-{{ ai_gen_id }});
+    color: var(--aromaras-brand-maroon-{{ ai_gen_id }});
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .aromaras-plp-card-{{ ai_gen_id }}:hover .aromaras-plp-card-cta-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .aromaras-plp-card-cta-{{ ai_gen_id }}:hover {
+    background-color: var(--aromaras-brand-gold-{{ ai_gen_id }});
+    color: #ffffff;
+  }
+
+  @media screen and (max-width: 989px) {
+    .aromaras-plp-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: calc(var(--aromaras-grid-gap-{{ ai_gen_id }}) * 0.7);
+      padding: 40px 20px;
+    }
+
+    .aromaras-plp-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.7);
+    }
+
+    .aromaras-plp-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .aromaras-plp-header-{{ ai_gen_id }} {
+      height: calc({{ block.settings.header_height }}vh * 0.7);
+    }
+
+    .aromaras-plp-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: calc(var(--aromaras-grid-gap-{{ ai_gen_id }}) * 0.5);
+      padding: 30px 16px;
+    }
+
+    .aromaras-plp-filter-bar-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .aromaras-plp-card-cta-{{ ai_gen_id }} {
+      opacity: 1;
+    }
+  }
+{% endstyle %}
+
+<aromaras-scent-wardrobe-{{ ai_gen_id }} class="aromaras-plp-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div 
+    class="aromaras-plp-header-{{ ai_gen_id }}"
+    {% if collection.image %}
+      style="background-image: url('{{ collection.image | image_url: width: 2000 }}');"
+    {% elsif block.settings.fallback_header_image %}
+      style="background-image: url('{{ block.settings.fallback_header_image | image_url: width: 2000 }}');"
+    {% endif %}
+  >
+    <div class="aromaras-plp-header-overlay-{{ ai_gen_id }}"></div>
+    <div class="aromaras-plp-header-content-{{ ai_gen_id }}">
+      <h1 class="aromaras-plp-title-{{ ai_gen_id }}">
+        {% if collection.title != blank %}
+          {{ collection.title }}
+        {% else %}
+          {{ block.settings.fallback_title }}
+        {% endif %}
+      </h1>
+      {% if collection.description != blank %}
+        <div class="aromaras-plp-description-{{ ai_gen_id }}">
+          {{ collection.description }}
+        </div>
+      {% elsif block.settings.fallback_description != blank %}
+        <div class="aromaras-plp-description-{{ ai_gen_id }}">
+          {{ block.settings.fallback_description }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if block.settings.show_filters %}
+    <div class="aromaras-plp-filter-bar-{{ ai_gen_id }}">
+      <div class="aromaras-plp-filter-{{ ai_gen_id }}">
+        <label class="aromaras-plp-filter-label-{{ ai_gen_id }}" for="scent-identity-{{ ai_gen_id }}">
+          {{ block.settings.filter_scent_label }}
+        </label>
+        <select id="scent-identity-{{ ai_gen_id }}" class="aromaras-plp-filter-select-{{ ai_gen_id }}" data-filter-type="scent">
+          <option value="">All</option>
+          <option value="oud">Oud</option>
+          <option value="fresh">Fresh</option>
+          <option value="floral">Floral</option>
+          <option value="woody">Woody</option>
+          <option value="spicy">Spicy</option>
+        </select>
+      </div>
+
+      <div class="aromaras-plp-filter-{{ ai_gen_id }}">
+        <label class="aromaras-plp-filter-label-{{ ai_gen_id }}" for="intensity-{{ ai_gen_id }}">
+          {{ block.settings.filter_intensity_label }}
+        </label>
+        <select id="intensity-{{ ai_gen_id }}" class="aromaras-plp-filter-select-{{ ai_gen_id }}" data-filter-type="intensity">
+          <option value="">All</option>
+          <option value="light">Light</option>
+          <option value="moderate">Moderate</option>
+          <option value="intense">Intense</option>
+        </select>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="aromaras-plp-grid-{{ ai_gen_id }}" data-product-grid>
+    {% if collection.products.size > 0 %}
+      {% for product in collection.products %}
+        <div 
+          class="aromaras-plp-card-{{ ai_gen_id }}"
+          data-scent="{{ product.metafields.custom.scent_identity }}"
+          data-intensity="{{ product.metafields.custom.intensity }}"
+        >
+          <a href="{{ product.url }}" class="aromaras-plp-card-image-wrapper-{{ ai_gen_id }}">
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                class="aromaras-plp-card-image-{{ ai_gen_id }} aromaras-plp-card-image-primary-{{ ai_gen_id }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+              >
+            {% endif %}
+
+            {% if product.images[1] %}
+              <img
+                src="{{ product.images[1] | image_url: width: 800 }}"
+                alt="{{ product.images[1].alt | escape }}"
+                class="aromaras-plp-card-image-{{ ai_gen_id }} aromaras-plp-card-image-secondary-{{ ai_gen_id }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+              {% else %}
+              <img
+                src="{{ product.featured_image | image_url: width: 800 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                class="aromaras-plp-card-image-{{ ai_gen_id }} aromaras-plp-card-image-secondary-{{ ai_gen_id }}"
+                loading="lazy"
+                width="800"
+                height="1067"
+              >
+            {% endif %}
+
+            <div class="aromaras-plp-card-badges-{{ ai_gen_id }}">
+              {% if product.metafields.performance.longevity %}
+                <span class="aromaras-plp-badge-{{ ai_gen_id }}">
+                  ⏳ {{ product.metafields.performance.longevity }}
+                </span>
+              {% endif %}
+              {% if product.metafields.performance.occasion %}
+                <span class="aromaras-plp-badge-{{ ai_gen_id }}">
+                  🌙 {{ product.metafields.performance.occasion }}
+                </span>
+              {% endif %}
+            </div>
+          </a>
+
+          <div class="aromaras-plp-card-body-{{ ai_gen_id }}">
+            <h3 class="aromaras-plp-card-title-{{ ai_gen_id }}">
+              <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
+                {{ product.title }}
+              </a>
+            </h3>
+            <div class="aromaras-plp-card-price-{{ ai_gen_id }}">
+              {{ product.price | money }}
+            </div>
+            <a href="{{ product.url }}" class="aromaras-plp-card-cta-{{ ai_gen_id }}">
+              {{ block.settings.cta_text }}
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      {% for i in (1..6) %}
+        <div class="aromaras-plp-card-{{ ai_gen_id }}">
+          <div class="aromaras-plp-card-image-wrapper-{{ ai_gen_id }}">
+            {{ 'product-1' | placeholder_svg_tag }}
+          </div>
+          <div class="aromaras-plp-card-body-{{ ai_gen_id }}">
+            <h3 class="aromaras-plp-card-title-{{ ai_gen_id }}">Sample Product</h3>
+            <div class="aromaras-plp-card-price-{{ ai_gen_id }}">{{'9999' | money }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</aromaras-scent-wardrobe-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AromarasScentWardrobe{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.filters = this.querySelectorAll('[data-filter-type]');
+        this.productGrid = this.querySelector('[data-product-grid]');
+        this.products = this.querySelectorAll('.aromaras-plp-card-{{ ai_gen_id }}');
+        
+        this.setupFilters();
+      }
+
+      setupFilters() {
+        this.filters.forEach(filter => {
+          filter.addEventListener('change', () => this.applyFilters());
+        });
+      }
+
+      applyFilters() {
+        const scentFilter = this.querySelector('[data-filter-type="scent"]').value.toLowerCase();
+        const intensityFilter = this.querySelector('[data-filter-type="intensity"]').value.toLowerCase();
+
+        this.products.forEach(product => {
+          const productScent = (product.dataset.scent || '').toLowerCase();
+          const productIntensity = (product.dataset.intensity || '').toLowerCase();
+
+          const scentMatch = !scentFilter || productScent.includes(scentFilter);
+          const intensityMatch = !intensityFilter || productIntensity.includes(intensityFilter);
+
+          if (scentMatch && intensityMatch) {
+            product.style.display = 'flex';
+          } else {
+            product.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    customElements.define('aromaras-scent-wardrobe-{{ ai_gen_id }}', AromarasScentWardrobe{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Scent Wardrobe v2",
+  "tag": null,
+  "class": "aromaras-scent-wardrobe-block",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header section"
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "Header height",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "unit": "vh",
+      "default": 45
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_header_image",
+      "label": "Fallback header image"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback title",
+      "default": "The Scent Wardrobe"
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_description",
+      "label": "Fallback description",
+      "default": "Discover your signature scent from our curated collection of luxury extrait de parfum."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 0.5,
+      "step": 0.1,
+      "default": 0.2
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing",
+      "label": "Title letter spacing",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_price_size",
+      "label": "Card price size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_cream",
+      "label": "Background cream",
+      "default": "#F9F5F1"
+    },
+    {
+      "type": "color",
+      "id": "brand_maroon",
+      "label": "Brand maroon",
+      "default": "#2D004B"
+    },
+    {
+      "type": "color",
+      "id": "brand_gold",
+      "label": "Brand gold",
+      "default": "#D4AF37"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Filters"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show filter bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "filter_scent_label",
+      "label": "Scent filter label",
+      "default": "Scent Identity"
+    },
+    {
+      "type": "text",
+      "id": "filter_intensity_label",
+      "label": "Intensity filter label",
+      "default": "Intensity"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "Quick Acquire"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scent Wardrobe v2"
+    }
+  ]
+}
 {% endschema %}
