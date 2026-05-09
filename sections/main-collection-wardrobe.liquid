@@ -1,52 +1,94 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --wardrobe-bg: {{ section.settings.bg_color }};
+    --wardrobe-text: {{ section.settings.text_color }};
+    --wardrobe-accent: {{ section.settings.accent_color }};
+    --wardrobe-card-bg: {{ section.settings.card_bg_color }};
+    --wardrobe-offset: {{ section.settings.vertical_offset }}px;
+  }
+
+  .wardrobe-grid {
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, minmax(0, 1fr));
+  }
+
+  @media (min-width: 768px) {
+    .wardrobe-grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+    }
+  }
+
+  {% if section.settings.enable_asymmetry %}
+    @media (min-width: 1024px) {
+      .wardrobe-item:nth-child(3n+1), 
+      .wardrobe-item:nth-child(3n+3) {
+        margin-top: var(--wardrobe-offset);
+      }
+      .wardrobe-item:nth-child(3n+2) {
+        margin-top: calc(var(--wardrobe-offset) * -1);
+      }
+    }
+  {% endif %}
+{% endstyle %}
+
 <!-- 1. Breadcrumbs and Title -->
-<section class="pt-24 pb-12 px-4 md:px-12 max-w-screen-2xl mx-auto">
-  <nav class="flex items-center gap-2 mb-6" aria-label="Breadcrumb">
-    <a href="/" class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Home</a>
-    <span class="text-on-surface-variant/30 text-[10px]">/</span>
-    <span class="font-label text-[10px] uppercase tracking-widest text-primary">{{ collection.title | default: "The Scent Wardrobe" }}</span>
-  </nav>
+<section class="pt-24 pb-12 px-4 md:px-12 max-w-screen-2xl mx-auto" style="background-color: var(--wardrobe-bg); color: var(--wardrobe-text);">
+  {% if section.settings.show_breadcrumbs %}
+    <nav class="flex items-center gap-2 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="font-label text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">Home</a>
+      <span class="opacity-30 text-[10px]">/</span>
+      <span class="font-label text-[10px] uppercase tracking-widest" style="color: var(--wardrobe-accent);">{{ collection.title | default: "The Scent Wardrobe" }}</span>
+    </nav>
+  {% endif %}
 
   <div class="flex flex-col md:flex-row justify-between items-end gap-8">
-    <h1 class="font-headline text-5xl md:text-7xl italic leading-none">
-      {{ collection.title | default: "The Scent Wardrobe" }}
+    <h1 class="font-headline {{ section.settings.title_size }} {% if section.settings.italic_title %}italic{% endif %} leading-none">
+      {{ collection.title | default: section.settings.fallback_title }}
     </h1>
 
     <!-- Mood Filter -->
-    <div class="flex flex-col items-start md:items-end gap-3">
-      <span class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Filter by Mood</span>
-      <div class="flex gap-2">
-        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Fresh</button>
-        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Bold</button>
-        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Elegant</button>
+    {% if section.settings.show_mood_filter %}
+      <div class="flex flex-col items-start md:items-end gap-3">
+        <span class="font-label text-[10px] uppercase tracking-[0.2em] opacity-60">{{ section.settings.mood_filter_label }}</span>
+        <div class="flex flex-wrap gap-2">
+          {% for block in section.blocks %}
+            {% if block.type == 'mood_tag' %}
+              <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">
+                {{ block.settings.tag_name }}
+              </button>
+            {% endif %}
+          {% endfor %}
+          {% if section.blocks.size == 0 %}
+             <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Fresh</button>
+             <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Bold</button>
+          {% endif %}
+        </div>
       </div>
-    </div>
+    {% endif %}
   </div>
 </section>
 
 <!-- 2. Product Grid -->
 <section class="max-w-screen-2xl mx-auto px-4 md:px-12 py-12 md:py-20">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24 md:gap-y-32">
+  <div class="grid wardrobe-grid gap-x-12 gap-y-24 md:gap-y-32">
     {% for product in collection.products %}
-      {% assign mod_index = forloop.index0 | modulo: 3 %}
-      <!-- Vertical offset for asymmetry -->
-      <article class="flex flex-col group {% if mod_index == 1 %}lg:-mt-12{% elsif mod_index == 0 or mod_index == 2 %}lg:mt-12{% endif %}">
-        <a href="{{ product.url }}" class="block mb-8 relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+      <article class="flex flex-col group wardrobe-item">
+        <a href="{{ product.url }}" class="block mb-8 relative overflow-hidden" style="aspect-ratio: {{ section.settings.image_aspect_ratio }}; background-color: var(--wardrobe-card-bg);">
           <img 
             src="{{ product.featured_image | image_url: width: 800 }}" 
             alt="{{ product.title }}" 
             class="w-full h-full object-cover grayscale-0 group-hover:grayscale-[0.2] transition-all duration-700"
           >
-          <!-- Subtle overlay on hover -->
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
           
-          <!-- Variant Scent Notes (Hidden by default, shown on hover?) -->
-          <div class="absolute bottom-6 left-6 right-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-             <div class="flex flex-wrap gap-2">
-               {% for tag in product.tags limit: 3 %}
-                 <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-label uppercase tracking-widest text-primary">{{ tag }}</span>
-               {% endfor %}
-             </div>
-          </div>
+          {% if section.settings.show_tags_on_hover %}
+            <div class="absolute bottom-6 left-6 right-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+               <div class="flex flex-wrap gap-2">
+                 {% for tag in product.tags limit: 3 %}
+                   <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-label uppercase tracking-widest text-primary">{{ tag }}</span>
+                 {% endfor %}
+               </div>
+            </div>
+          {% endif %}
         </a>
 
         <div class="flex flex-col gap-4">
@@ -54,53 +96,30 @@
             <h3 class="font-headline text-2xl group-hover:italic transition-all duration-300">
               <a href="{{ product.url }}">{{ product.title }}</a>
             </h3>
-            <!-- Scent Note Icons (Mock) -->
-            <div class="flex gap-1 text-on-surface-variant/40">
-              <span class="material-symbols-outlined text-sm">cloud</span>
-              <span class="material-symbols-outlined text-sm">filter_vintage</span>
-            </div>
+            {% if section.settings.show_icons %}
+              <div class="flex gap-1 opacity-40">
+                <span class="material-symbols-outlined text-sm">cloud</span>
+                <span class="material-symbols-outlined text-sm">filter_vintage</span>
+              </div>
+            {% endif %}
           </div>
 
-          <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant leading-relaxed">
+          <p class="font-label text-[10px] uppercase tracking-[0.2em] opacity-60 leading-relaxed">
             {% for tag in product.tags limit: 3 %}
               {{ tag }}{% unless forloop.last %}, {% endunless %}
             {% else %}
-              Saffron, Oud, Damascus Rose
+              {{ section.settings.fallback_notes }}
             {% endfor %}
           </p>
 
-          <!-- Selection Tiles for Size -->
-          <div class="flex gap-3 mt-2">
-            <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">50ML</button>
-            <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">100ML</button>
-          </div>
+          {% if section.settings.show_size_options %}
+            <div class="flex gap-3 mt-2">
+              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">50ML</button>
+              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">100ML</button>
+            </div>
+          {% endif %}
         </div>
       </article>
-    {% else %}
-      <!-- Onboarding / Fallback -->
-      {% for i in (1..6) %}
-        {% assign mod_index = forloop.index0 | modulo: 3 %}
-        <article class="flex flex-col group {% if mod_index == 1 %}lg:-mt-12{% elsif mod_index == 0 or mod_index == 2 %}lg:mt-12{% endif %}">
-          <div class="block mb-8 relative aspect-[4/5] overflow-hidden bg-surface-container-low">
-            <div class="w-full h-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant/20">
-               {{ 'product-' | append: i | placeholder_svg_tag: 'w-24 h-24' }}
-            </div>
-          </div>
-          <div class="flex flex-col gap-4">
-            <div class="flex justify-between items-baseline">
-              <h3 class="font-headline text-2xl italic">Perfume Name {{ i }}</h3>
-              <div class="flex gap-1 text-on-surface-variant/40">
-                <span class="material-symbols-outlined text-sm">cloud</span>
-              </div>
-            </div>
-            <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Bergamot, White Musk, Cotton</p>
-            <div class="flex gap-3 mt-2">
-              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest">50ML</button>
-              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest">100ML</button>
-            </div>
-          </div>
-        </article>
-      {% endfor %}
     {% endfor %}
   </div>
 </section>
@@ -108,10 +127,176 @@
 {% schema %}
 {
   "name": "Wardrobe PLP Grid",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns (Desktop)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "label": "Columns (Mobile)",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_asymmetry",
+      "label": "Enable Asymmetrical Grid",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "vertical_offset",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Vertical Offset Amount",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Typography & Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#faf9f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1a1c1b"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#775a19"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Placeholder Background",
+      "default": "#f4f3f1"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "text-4xl md:text-5xl", "label": "Small" },
+        { "value": "text-5xl md:text-7xl", "label": "Medium" },
+        { "value": "text-6xl md:text-9xl", "label": "Large" }
+      ],
+      "default": "text-5xl md:text-7xl"
+    },
+    {
+      "type": "checkbox",
+      "id": "italic_title",
+      "label": "Italicize Title",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content Visibility"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback Title",
+      "default": "The Scent Wardrobe"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show Breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mood_filter",
+      "label": "Show Mood Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "mood_filter_label",
+      "label": "Mood Filter Label",
+      "default": "Filter by Mood"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "4/5", "label": "Portrait (4:5)" },
+        { "value": "3/4", "label": "Portrait (3:4)" },
+        { "value": "1/1", "label": "Square (1:1)" }
+      ],
+      "default": "4/5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags_on_hover",
+      "label": "Show Scent Tags on Hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icons",
+      "label": "Show Scent Icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_options",
+      "label": "Show Size Selection",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "fallback_notes",
+      "label": "Fallback Scent Notes",
+      "default": "Saffron, Oud, Damascus Rose"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mood_tag",
+      "name": "Mood Tag",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag_name",
+          "label": "Tag Name",
+          "default": "Fresh"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Wardrobe PLP Grid"
+      "name": "Wardrobe PLP Grid",
+      "blocks": [
+        { "type": "mood_tag", "settings": { "tag_name": "Fresh" } },
+        { "type": "mood_tag", "settings": { "tag_name": "Bold" } },
+        { "type": "mood_tag", "settings": { "tag_name": "Elegant" } }
+      ]
     }
   ]
 }

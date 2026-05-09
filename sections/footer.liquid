@@ -1,40 +1,57 @@
-<footer class="bg-neutral-50 dark:bg-neutral-950 w-full py-14 md:py-20 px-4 md:px-12 border-t border-outline-variant/10">
+<footer class="w-full py-14 md:py-20 px-4 md:px-12 border-t border-outline-variant/10" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }};">
   <div class="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+    <!-- Brand Info -->
     <div class="col-span-1 md:col-span-1">
       <h2 class="font-headline text-xl mb-6 tracking-widest">{{ shop.name | uppercase }}</h2>
-      <p class="font-sans text-[10px] leading-loose text-neutral-400 uppercase tracking-widest">
-        Crafting the next chapter of Indian perfumery through a lens of global sophistication and artisanal precision.
+      <p class="font-sans text-[10px] leading-loose opacity-60 uppercase tracking-widest">
+        {{ section.settings.description }}
       </p>
     </div>
+
+    <!-- Dynamic Menu Columns -->
+    {% for block in section.blocks %}
+      {% if block.type == 'link_list' %}
+        <div class="col-span-1">
+          <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">{{ block.settings.title }}</h3>
+          <div class="flex flex-col gap-4">
+            {% for link in block.settings.menu.links %}
+              <a class="font-sans text-[10px] tracking-widest uppercase opacity-60 hover:opacity-100 transition-opacity" href="{{ link.url }}">
+                {{ link.title }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Newsletter Column -->
     <div class="col-span-1">
-      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Concierge</h3>
-      <div class="flex flex-col gap-4">
-        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">About Us</a>
-        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Loyalty</a>
-        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Track Order</a>
-      </div>
-    </div>
-    <div class="col-span-1">
-      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Follow</h3>
-      <div class="flex flex-col gap-4">
-        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">Instagram</a>
-        <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors" href="#">YouTube</a>
-      </div>
-    </div>
-    <div class="col-span-1">
-      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">Newsletter</h3>
-      <p class="font-sans text-[10px] text-neutral-400 uppercase tracking-widest mb-6 leading-relaxed">Join our inner circle for exclusive early releases.</p>
+      <h3 class="font-label text-[10px] uppercase tracking-widest mb-6">{{ section.settings.newsletter_title }}</h3>
+      <p class="font-sans text-[10px] opacity-60 uppercase tracking-widest mb-6 leading-relaxed">
+        {{ section.settings.newsletter_text }}
+      </p>
       <div class="relative">
-        <input class="w-full bg-transparent border-b border-outline-variant py-2 text-[10px] tracking-widest font-sans focus:outline-none focus:border-primary transition-colors" placeholder="YOUR EMAIL" type="email"/>
+        <input 
+          class="w-full bg-transparent border-b border-outline-variant py-2 text-[10px] tracking-widest font-sans focus:outline-none focus:border-primary transition-colors placeholder:text-current placeholder:opacity-30" 
+          placeholder="{{ section.settings.newsletter_placeholder }}" 
+          type="email"
+        />
         <button class="absolute right-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-sm" data-icon="east">east</button>
       </div>
     </div>
   </div>
+
+  <!-- Bottom Bar -->
   <div class="max-w-screen-2xl mx-auto mt-14 md:mt-20 pt-10 md:pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between gap-4 md:gap-6">
-    <span class="font-sans text-[10px] tracking-widest uppercase text-neutral-400">© {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. ALL RIGHTS RESERVED.</span>
+    <span class="font-sans text-[10px] tracking-widest uppercase opacity-60">
+      © {{ 'now' | date: '%Y' }} {{ shop.name | uppercase }}. {{ section.settings.copyright_text }}
+    </span>
     <div class="flex gap-8">
-      <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400" href="#">Privacy Policy</a>
-      <a class="font-sans text-[10px] tracking-widest uppercase text-neutral-400" href="#">Terms of Service</a>
+      {% for link in section.settings.bottom_menu.links %}
+        <a class="font-sans text-[10px] tracking-widest uppercase opacity-60 hover:opacity-100" href="{{ link.url }}">
+          {{ link.title }}
+        </a>
+      {% endfor %}
     </div>
   </div>
 </footer>
@@ -42,6 +59,98 @@
 {% schema %}
 {
   "name": "Aromaras Footer",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#faf9f7"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1a1c1b"
+    },
+    {
+      "type": "header",
+      "content": "Brand Information"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Crafting the next chapter of Indian perfumery through a lens of global sophistication and artisanal precision."
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Join our inner circle for exclusive early releases."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Input Placeholder",
+      "default": "YOUR EMAIL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "ALL RIGHTS RESERVED."
+    },
+    {
+      "type": "link_list",
+      "id": "bottom_menu",
+      "label": "Bottom Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Menu"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Select Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aromaras Footer",
+      "blocks": [
+        { "type": "link_list", "settings": { "title": "Concierge" } },
+        { "type": "link_list", "settings": { "title": "Follow" } }
+      ]
+    }
+  ]
 }
 {% endschema %}

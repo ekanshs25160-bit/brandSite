@@ -1,82 +1,110 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "Aromaras Brand Site",
+    "theme_version": "1.0.0",
+    "theme_author": "Antigravity",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Brand Identity",
     "settings": [
       {
         "type": "header",
-        "content": "t:general.fonts"
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#1a1c1b"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color",
+        "default": "#775a19"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Global Background",
+        "default": "#faf9f7"
+      },
+      {
+        "type": "header",
+        "content": "Brand Typography"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_headline",
+        "label": "Headline Font (Serif)",
+        "default": "eb_garamond_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_functional",
+        "label": "Functional Font (Sans)",
+        "default": "montserrat_n4"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Fonts"
       },
       {
         "type": "font_picker",
         "id": "type_primary_font",
         "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "label": "Base Body Font"
       }
     ]
   },
   {
-    "name": "t:general.layout",
+    "name": "Layout",
     "settings": [
       {
         "type": "select",
         "id": "max_page_width",
-        "label": "t:labels.page_width",
+        "label": "Page Width",
         "options": [
-          {
-            "value": "90rem",
-            "label": "t:options.page_width.narrow"
-          },
-          {
-            "value": "110rem",
-            "label": "t:options.page_width.wide"
-          }
+          { "value": "90rem", "label": "Narrow" },
+          { "value": "110rem", "label": "Wide" },
+          { "value": "120rem", "label": "Extra Wide" }
         ],
-        "default": "90rem"
+        "default": "110rem"
       },
       {
         "type": "range",
-        "id": "min_page_margin",
+        "id": "grid_gap",
         "min": 10,
-        "max": 100,
-        "step": 1,
+        "max": 60,
+        "step": 2,
         "unit": "px",
-        "label": "t:labels.page_margin",
-        "default": 20
+        "label": "Grid Gap",
+        "default": 24
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Colors",
     "settings": [
       {
         "type": "color",
         "id": "background_color",
         "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "label": "Background"
       },
       {
         "type": "color",
         "id": "foreground_color",
         "default": "#333333",
-        "label": "t:labels.foreground"
-      },
-      {
-        "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "unit": "px",
-        "label": "t:labels.input_corner_radius",
-        "default": 4
+        "label": "Foreground"
       }
     ]
   }
