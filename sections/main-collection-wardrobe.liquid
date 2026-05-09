@@ -1,0 +1,118 @@
+<!-- 1. Breadcrumbs and Title -->
+<section class="pt-24 pb-12 px-4 md:px-12 max-w-screen-2xl mx-auto">
+  <nav class="flex items-center gap-2 mb-6" aria-label="Breadcrumb">
+    <a href="/" class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Home</a>
+    <span class="text-on-surface-variant/30 text-[10px]">/</span>
+    <span class="font-label text-[10px] uppercase tracking-widest text-primary">{{ collection.title | default: "The Scent Wardrobe" }}</span>
+  </nav>
+
+  <div class="flex flex-col md:flex-row justify-between items-end gap-8">
+    <h1 class="font-headline text-5xl md:text-7xl italic leading-none">
+      {{ collection.title | default: "The Scent Wardrobe" }}
+    </h1>
+
+    <!-- Mood Filter -->
+    <div class="flex flex-col items-start md:items-end gap-3">
+      <span class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Filter by Mood</span>
+      <div class="flex gap-2">
+        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Fresh</button>
+        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Bold</button>
+        <button class="px-6 py-2 bg-surface-container-high text-primary font-label text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Elegant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Product Grid -->
+<section class="max-w-screen-2xl mx-auto px-4 md:px-12 py-12 md:py-20">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24 md:gap-y-32">
+    {% for product in collection.products %}
+      {% assign mod_index = forloop.index0 | modulo: 3 %}
+      <!-- Vertical offset for asymmetry -->
+      <article class="flex flex-col group {% if mod_index == 1 %}lg:-mt-12{% elsif mod_index == 0 or mod_index == 2 %}lg:mt-12{% endif %}">
+        <a href="{{ product.url }}" class="block mb-8 relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+          <img 
+            src="{{ product.featured_image | image_url: width: 800 }}" 
+            alt="{{ product.title }}" 
+            class="w-full h-full object-cover grayscale-0 group-hover:grayscale-[0.2] transition-all duration-700"
+          >
+          <!-- Subtle overlay on hover -->
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+          
+          <!-- Variant Scent Notes (Hidden by default, shown on hover?) -->
+          <div class="absolute bottom-6 left-6 right-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+             <div class="flex flex-wrap gap-2">
+               {% for tag in product.tags limit: 3 %}
+                 <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[9px] font-label uppercase tracking-widest text-primary">{{ tag }}</span>
+               {% endfor %}
+             </div>
+          </div>
+        </a>
+
+        <div class="flex flex-col gap-4">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-headline text-2xl group-hover:italic transition-all duration-300">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h3>
+            <!-- Scent Note Icons (Mock) -->
+            <div class="flex gap-1 text-on-surface-variant/40">
+              <span class="material-symbols-outlined text-sm">cloud</span>
+              <span class="material-symbols-outlined text-sm">filter_vintage</span>
+            </div>
+          </div>
+
+          <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant leading-relaxed">
+            {% for tag in product.tags limit: 3 %}
+              {{ tag }}{% unless forloop.last %}, {% endunless %}
+            {% else %}
+              Saffron, Oud, Damascus Rose
+            {% endfor %}
+          </p>
+
+          <!-- Selection Tiles for Size -->
+          <div class="flex gap-3 mt-2">
+            <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">50ML</button>
+            <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest hover:border-primary transition-colors">100ML</button>
+          </div>
+        </div>
+      </article>
+    {% else %}
+      <!-- Onboarding / Fallback -->
+      {% for i in (1..6) %}
+        {% assign mod_index = forloop.index0 | modulo: 3 %}
+        <article class="flex flex-col group {% if mod_index == 1 %}lg:-mt-12{% elsif mod_index == 0 or mod_index == 2 %}lg:mt-12{% endif %}">
+          <div class="block mb-8 relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+            <div class="w-full h-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant/20">
+               {{ 'product-' | append: i | placeholder_svg_tag: 'w-24 h-24' }}
+            </div>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div class="flex justify-between items-baseline">
+              <h3 class="font-headline text-2xl italic">Perfume Name {{ i }}</h3>
+              <div class="flex gap-1 text-on-surface-variant/40">
+                <span class="material-symbols-outlined text-sm">cloud</span>
+              </div>
+            </div>
+            <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Bergamot, White Musk, Cotton</p>
+            <div class="flex gap-3 mt-2">
+              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest">50ML</button>
+              <button class="px-4 py-2 border border-outline-variant/30 text-[10px] font-label uppercase tracking-widest">100ML</button>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wardrobe PLP Grid",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Wardrobe PLP Grid"
+    }
+  ]
+}
+{% endschema %}
