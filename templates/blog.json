@@ -11,7 +11,28 @@
   "sections": {
     "main": {
       "type": "blog",
-      "settings": {}
+      "settings": {
+        "articles_per_page": 6,
+        "show_hero": false,
+        "hide_article_text": false,
+        "show_categories": false,
+        "enable_masonry": true,
+        "heading_scale": 1,
+        "post_spacing": 32,
+        "bg_color": "#fdf9f4",
+        "primary_color": "#2d004b",
+        "accent_color": "#d4af37",
+        "text_color": "#1c1b19",
+        "text_muted_color": "#4c444f",
+        "show_newsletter": false,
+        "newsletter_title": "The Private Compendium",
+        "newsletter_description": "Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays.",
+        "newsletter_button_label": "SUBSCRIBE",
+        "newsletter_icon": "drafts",
+        "all_essays_label": "ALL ESSAYS",
+        "read_more_label": "DISCOVER THE STORY",
+        "no_articles_text": "No journal entries found."
+      }
     }
   },
   "order": [
