@@ -2,7 +2,21 @@
   #shopify-section-{{ section.id }} {
     --blog-heading-scale: {{ section.settings.heading_scale }};
     --blog-gutter: {{ section.settings.post_spacing }}px;
+    --blog-bg: {{ section.settings.bg_color | default: '#fdf9f4' }};
+    --blog-primary: {{ section.settings.primary_color | default: '#2D004B' }};
+    --blog-accent: {{ section.settings.accent_color | default: '#D4AF37' }};
+    --blog-text: {{ section.settings.text_color | default: '#1c1b19' }};
+    --blog-text-muted: {{ section.settings.text_muted_color | default: '#4c444f' }};
   }
+
+  #shopify-section-{{ section.id }} .bg-background { background-color: var(--blog-bg); }
+  #shopify-section-{{ section.id }} .text-brand-maroon { color: var(--blog-primary); }
+  #shopify-section-{{ section.id }} .text-brand-gold { color: var(--blog-accent); }
+  #shopify-section-{{ section.id }} .border-brand-maroon { border-color: var(--blog-primary); }
+  #shopify-section-{{ section.id }} .border-brand-gold { border-color: var(--blog-accent); }
+  #shopify-section-{{ section.id }} .bg-brand-maroon { background-color: var(--blog-primary); }
+  #shopify-section-{{ section.id }} .text-on-surface-variant { color: var(--blog-text-muted); }
+  #shopify-section-{{ section.id }} .text-on-background { color: var(--blog-text); }
 
   #shopify-section-{{ section.id }} img,
   #shopify-section-{{ section.id }} input,
@@ -17,72 +31,87 @@
 
 <main class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased selection:bg-brand-maroon selection:text-white">
   
-  <!-- 1. Sub Navigation Bar (Categories) -->
-  <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
-    <div class="flex justify-center items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
-      <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}">ALL ESSAYS</a>
-      {% for tag in blog.all_tags %}
-        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}/tagged/{{ tag | handle }}">
-          {{ tag | uppercase }}
+  {% if section.settings.show_categories %}
+    <!-- 1. Sub Navigation Bar (Categories) -->
+    <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
+      <div class="flex justify-center items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
+        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}">
+          {{ section.settings.all_essays_label | default: "ALL ESSAYS" }}
         </a>
-      {% endfor %}
+        {% for tag in blog.all_tags %}
+          <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}/tagged/{{ tag | handle }}">
+            {{ tag | uppercase }}
+          </a>
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16">
-    {% paginate blog.articles by 10 %}
+    {% paginate blog.articles by section.settings.articles_per_page %}
       
       {% if blog.articles.size > 0 %}
-        <!-- 2. Hero Section (Featured Article) -->
-        {% assign featured_article = blog.articles.first %}
-        <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-24 md:mb-32 items-center">
-          <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px]">
-            {% if featured_article.image %}
-              <img src="{{ featured_article.image | image_url: width: 2000 }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
-            {% else %}
-              <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
-            {% endif %}
-          </div>
-          <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-4 md:px-0 mt-8 md:mt-0">
-            <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
-              {{ featured_article.tags.first | default: "Featured Story" }}
-            </span>
-            <h1 class="font-headline-xl text-4xl md:text-5xl lg:text-6xl text-brand-maroon mb-6 leading-tight">
-              {{ featured_article.title }}
-            </h1>
-            <p class="font-nav-label text-[14px] leading-relaxed text-on-surface-variant mb-10 normal-case font-normal">
-              {{ featured_article.excerpt_or_content | strip_html | truncatewords: 35 }}
-            </p>
-            <a class="inline-flex items-center group self-start" href="{{ featured_article.url }}">
-              <span class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-1 group-hover:text-primary transition-colors tracking-widest uppercase">DISCOVER THE STORY</span>
-              <span class="material-symbols-outlined ml-2 text-brand-gold group-hover:text-brand-maroon transition-colors text-[18px]">arrow_right_alt</span>
-            </a>
-          </div>
-        </section>
+        
+        {% if section.settings.show_hero %}
+          <!-- 2. Hero Section (Featured Article) -->
+          {% assign featured_article = blog.articles.first %}
+          <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-24 md:mb-32 items-center">
+            <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px]">
+              {% if featured_article.image %}
+                <img src="{{ featured_article.image | image_url: width: 2000 }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
+              {% else %}
+                <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
+              {% endif %}
+            </div>
+            <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-4 md:px-0 mt-8 md:mt-0">
+              <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
+                {{ featured_article.tags.first | default: "Featured Story" }}
+              </span>
+              <h1 class="font-headline-xl text-4xl md:text-5xl lg:text-6xl text-brand-maroon mb-6 leading-tight">
+                {{ featured_article.title }}
+              </h1>
+              <p class="font-nav-label text-[14px] leading-relaxed text-on-surface-variant mb-10 normal-case font-normal">
+                {{ featured_article.excerpt_or_content | strip_html | truncatewords: 35 }}
+              </p>
+              <a class="inline-flex items-center group self-start" href="{{ featured_article.url }}">
+                <span class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-1 group-hover:text-primary transition-colors tracking-widest uppercase">
+                  {{ section.settings.read_more_label | default: "DISCOVER THE STORY" }}
+                </span>
+                <span class="material-symbols-outlined ml-2 text-brand-gold group-hover:text-brand-maroon transition-colors text-[18px]">arrow_right_alt</span>
+              </a>
+            </div>
+          </section>
+          {% assign offset_val = 1 %}
+        {% else %}
+          {% assign offset_val = 0 %}
+        {% endif %}
 
         <!-- 3. Editorial Masonry Grid -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
-          {% for article in blog.articles offset: 1 %}
-            {% assign mod = forloop.index | modulo: 4 %}
+          {% for article in blog.articles offset: offset_val %}
+            {% assign loop_index = forloop.index %}
+            {% assign mod = loop_index | modulo: 4 %}
             
-            {% if forloop.index == 3 %}
+            {% if section.settings.show_newsletter and loop_index == 3 %}
               <!-- Newsletter Block Interruption -->
               <div class="col-span-1 md:col-span-12 my-12">
                 <section class="bg-[#Fdfaf8] border border-brand-maroon/20 py-24 px-8 text-center max-w-4xl mx-auto flex flex-col items-center">
-                  <span class="material-symbols-outlined text-brand-gold text-[32px] mb-6 block">drafts</span>
-                  <h2 class="font-headline-xl text-3xl md:text-5xl text-brand-maroon mb-6 italic">The Private Compendium</h2>
+                  <span class="material-symbols-outlined text-brand-gold text-[32px] mb-6 block">{{ section.settings.newsletter_icon | default: 'drafts' }}</span>
+                  <h2 class="font-headline-xl text-3xl md:text-5xl text-brand-maroon mb-6 italic">
+                    {{ section.settings.newsletter_title | default: "The Private Compendium" }}
+                  </h2>
                   <p class="font-nav-label text-[14px] text-on-surface-variant mb-10 normal-case font-normal max-w-lg mx-auto">
-                    Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays.
+                    {{ section.settings.newsletter_description | default: "Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays." }}
                   </p>
                   {% form 'customer', class: 'w-full max-w-md flex flex-col sm:flex-row gap-4' %}
                     <input type="hidden" name="contact[tags]" value="newsletter">
                     <input class="flex-1 bg-transparent border-0 border-b border-brand-maroon focus:ring-0 focus:border-brand-gold font-data-sm text-[10px] py-3 px-0 placeholder:text-on-surface-variant/50 uppercase tracking-widest" 
-                           placeholder="YOUR EMAIL ADDRESS" 
+                           placeholder="{{ 'newsletter.label' | t | default: 'YOUR EMAIL ADDRESS' }}" 
                            type="email" 
                            name="contact[email]" 
                            required>
                     <button class="border border-brand-maroon text-brand-maroon hover:bg-brand-maroon hover:text-white font-nav-label text-[10px] px-8 py-3 transition-colors duration-300 tracking-widest uppercase" type="submit">
-                      SUBSCRIBE
+                      {{ section.settings.newsletter_button_label | default: "SUBSCRIBE" }}
                     </button>
                   {% endform %}
                 </section>
@@ -114,7 +143,7 @@
 
             {% elsif mod == 2 %}
               <!-- Article Type 2: md:col-span-7, aspect-[16/9], md:mt-32 -->
-              <article class="col-span-1 md:col-span-7 group cursor-pointer md:mt-32">
+              <article class="col-span-1 md:col-span-7 group cursor-pointer {% if section.settings.enable_masonry %}md:mt-32{% endif %}">
                 <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-[16/9] border border-brand-maroon/10">
                   {% if article.image %}
                     <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0">
@@ -161,8 +190,10 @@
             {% else %}
               <!-- Article Type 4: md:col-span-6, aspect-square, md:mt-24 -->
               <!-- Empty space for layout tension -->
-              <div class="hidden md:block md:col-span-2"></div>
-              <article class="col-span-1 md:col-span-6 group cursor-pointer md:mt-24">
+              {% if section.settings.enable_masonry %}
+                <div class="hidden md:block md:col-span-2"></div>
+              {% endif %}
+              <article class="col-span-1 md:col-span-6 group cursor-pointer {% if section.settings.enable_masonry %}md:mt-24{% endif %}">
                 <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-square border border-brand-maroon/10">
                   {% if article.image %}
                     <img src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -195,7 +226,7 @@
 
       {% else %}
         <div class="text-center py-32">
-          <h2 class="font-headline-xl text-3xl text-brand-maroon">No journal entries found.</h2>
+          <h2 class="font-headline-xl text-3xl text-brand-maroon">{{ section.settings.no_articles_text | default: "No journal entries found." }}</h2>
           <a href="{{ shop.url }}" class="text-brand-gold uppercase tracking-widest mt-8 inline-block">Return to Boutique</a>
         </div>
       {% endif %}
@@ -209,6 +240,37 @@
   "name": "Aromaras Editorial Blog",
   "settings": [
     {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "label": "Articles per page",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero",
+      "label": "Show Featured Hero Article",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_categories",
+      "label": "Show Category Bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_masonry",
+      "label": "Enable Masonry Grid Offsets",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "heading_scale",
       "min": 0.8,
@@ -220,12 +282,103 @@
     {
       "type": "range",
       "id": "post_spacing",
-      "min": 40,
+      "min": 24,
       "max": 120,
-      "step": 10,
+      "step": 8,
       "unit": "px",
-      "label": "Grid Spacing",
-      "default": 80
+      "label": "Grid Spacing (Gutter)",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Color Palette"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fdf9f4"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color (Maroon)",
+      "default": "#2D004B"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Gold)",
+      "default": "#D4AF37"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body Text Color",
+      "default": "#1c1b19"
+    },
+    {
+      "type": "color",
+      "id": "text_muted_color",
+      "label": "Muted Text Color",
+      "default": "#4c444f"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter Interruption"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Interruption",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "The Private Compendium"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_description",
+      "label": "Newsletter Description",
+      "default": "Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Button Label",
+      "default": "SUBSCRIBE"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_icon",
+      "label": "Material Icon Name",
+      "default": "drafts",
+      "info": "Use any name from Google Material Symbols"
+    },
+    {
+      "type": "header",
+      "content": "Labels & Text"
+    },
+    {
+      "type": "text",
+      "id": "all_essays_label",
+      "label": "All Essays Label",
+      "default": "ALL ESSAYS"
+    },
+    {
+      "type": "text",
+      "id": "read_more_label",
+      "label": "Hero Button Label",
+      "default": "DISCOVER THE STORY"
+    },
+    {
+      "type": "text",
+      "id": "no_articles_text",
+      "label": "No Articles Text",
+      "default": "No journal entries found."
     }
   ],
   "presets": [
