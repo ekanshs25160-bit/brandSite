@@ -23,96 +23,148 @@
   }
 {% endstyle %}
 
-{%- assign selected_blog = section.settings.blog | default: blog -%}
-
 <main class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased selection:bg-brand-maroon selection:text-white">
   
-  {% if section.settings.show_categories and selected_blog != blank %}
-    <!-- 1. Sub Navigation Bar (Categories) -->
-    <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
-      <div class="flex items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
-        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ selected_blog.url }}">
-          {{ section.settings.all_essays_label | default: "ALL ESSAYS" }}
-        </a>
-        {% for tag in selected_blog.all_tags %}
-          <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ selected_blog.url }}/tagged/{{ tag | handle }}">
-            {{ tag | uppercase }}
+  {% if section.settings.show_categories %}
+    {%- assign nav_blog = section.settings.blog | default: blog -%}
+    {% if nav_blog != blank %}
+      <!-- 1. Sub Navigation Bar (Categories) -->
+      <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
+        <div class="flex items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
+          <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ nav_blog.url }}">
+            {{ section.settings.all_essays_label | default: "ALL ESSAYS" }}
           </a>
-        {% endfor %}
+          {% for tag in nav_blog.all_tags %}
+            <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ nav_blog.url }}/tagged/{{ tag | handle }}">
+              {{ tag | uppercase }}
+            </a>
+          {% endfor %}
+        </div>
       </div>
-    </div>
+    {% endif %}
   {% endif %}
 
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-16">
-    {% if selected_blog != blank and selected_blog.articles.size > 0 %}
-      {% paginate selected_blog.articles by section.settings.articles_per_page %}
-        
-        {% if section.settings.show_hero %}
-          <!-- 2. Hero Section (Featured Article) -->
-          {% assign featured_article = selected_blog.articles.first %}
-          <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-16 md:mb-32 items-center">
-            <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px] overflow-hidden">
-              {% if featured_article.image %}
-                <img src="{{ featured_article.image | image_url: width: 2000 }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20 hover:scale-105 transition-transform duration-1000">
-              {% else %}
-                <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
-              {% endif %}
-            </div>
-            {% unless section.settings.hide_article_text %}
-              <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-0 mt-8 md:mt-0">
-                <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
-                  {{ featured_article.tags.first | default: "Featured Story" }}
-                </span>
-                <h1 class="font-headline-xl text-3xl md:text-5xl lg:text-6xl text-brand-maroon mb-6 leading-tight">
-                  {{ featured_article.title }}
-                </h1>
-                <p class="font-nav-label text-[14px] leading-relaxed text-on-surface-variant mb-10 normal-case font-normal">
-                  {{ featured_article.excerpt_or_content | strip_html | truncatewords: 35 }}
-                </p>
-                <a class="inline-flex items-center group self-start" href="{{ featured_article.url }}">
-                  <span class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-1 group-hover:text-primary transition-colors tracking-widest uppercase">
-                    {{ section.settings.read_more_label | default: "DISCOVER THE STORY" }}
-                  </span>
-                  <span class="material-symbols-outlined ml-2 text-brand-gold group-hover:text-brand-maroon transition-colors text-[18px]">arrow_right_alt</span>
-                </a>
-              </div>
-            {% endunless %}
-          </section>
-          {% assign offset_val = 1 %}
-        {% else %}
-          {% assign offset_val = 0 %}
-        {% endif %}
+    
+    <!-- Hero Selection Logic -->
+    {% if section.settings.show_hero %}
+      {%- assign hero_article = section.settings.hero_article -%}
+      {%- if hero_article == blank -%}
+        {%- assign hero_article = blog.articles.first -%}
+      {%- endif -%}
 
-        <!-- 3. Editorial Masonry Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
-          {% for article in selected_blog.articles offset: offset_val %}
-            {% assign loop_index = forloop.index %}
-            {% assign mod = loop_index | modulo: 4 %}
+      {% if hero_article != blank %}
+        <!-- 2. Hero Section (Featured Article) -->
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-16 md:mb-32 items-center">
+          <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px] overflow-hidden">
+            {%- assign hero_img = section.settings.hero_image | default: hero_article.image -%}
+            {% if hero_img %}
+              <img src="{{ hero_img | image_url: width: 2000 }}" alt="{{ hero_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20 hover:scale-105 transition-transform duration-1000">
+            {% else %}
+              <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ hero_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
+            {% endif %}
+          </div>
+          {% unless section.settings.hide_article_text %}
+            <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-0 mt-8 md:mt-0">
+              <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
+                {{ hero_article.tags.first | default: "Featured Story" }}
+              </span>
+              <h1 class="font-headline-xl text-3xl md:text-5xl lg:text-6xl text-brand-maroon mb-6 leading-tight">
+                {{ hero_article.title }}
+              </h1>
+              <p class="font-nav-label text-[14px] leading-relaxed text-on-surface-variant mb-10 normal-case font-normal">
+                {{ hero_article.excerpt_or_content | strip_html | truncatewords: 35 }}
+              </p>
+              <a class="inline-flex items-center group self-start" href="{{ hero_article.url }}">
+                <span class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-1 group-hover:text-primary transition-colors tracking-widest uppercase">
+                  {{ section.settings.read_more_label | default: "DISCOVER THE STORY" }}
+                </span>
+                <span class="material-symbols-outlined ml-2 text-brand-gold group-hover:text-brand-maroon transition-colors text-[18px]">arrow_right_alt</span>
+              </a>
+            </div>
+          {% endunless %}
+        </section>
+      {% endif %}
+    {% endif %}
+
+    <!-- Grid Content Logic -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+      {%- assign block_count = 0 -%}
+      
+      {%- if section.blocks.size > 0 -%}
+        <!-- Render Curated Blocks (Articles or Images) -->
+        {%- for block in section.blocks -%}
+          {%- assign block_count = block_count | plus: 1 -%}
+          {%- assign mod = block_count | modulo: 4 -%}
+
+          {% if section.settings.show_newsletter and block_count == 3 %}
+            {% render 'newsletter-interruption', section: section %}
+          {% endif %}
+
+          {% if block.type == 'article' %}
+            {%- assign article = block.settings.article -%}
+            {% if article != blank %}
+              {% capture article_classes %}
+                {% if mod == 1 %}col-span-1 md:col-span-5{% elsif mod == 2 %}col-span-1 md:col-span-7 {% if section.settings.enable_masonry %}md:mt-32{% endif %}{% elsif mod == 3 %}col-span-1 md:col-span-4{% else %}col-span-1 md:col-span-6 {% if section.settings.enable_masonry %}md:mt-24{% endif %}{% endif %}
+              {% endcapture %}
+
+              {% capture aspect_ratio %}
+                {% if mod == 1 %}aspect-[4/5]{% elsif mod == 2 %}aspect-[16/9]{% elsif mod == 3 %}aspect-[3/4]{% else %}aspect-square{% endif %}
+              {% endcapture %}
+
+              {% if mod == 0 and section.settings.enable_masonry %}
+                <div class="hidden md:block md:col-span-2"></div>
+              {% endif %}
+
+              <article class="{{ article_classes | strip }} group cursor-pointer" {{ block.shopify_attributes }}>
+                <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 {{ aspect_ratio }} border border-brand-maroon/10">
+                  {%- assign art_img = block.settings.image | default: article.image -%}
+                  {% if art_img %}
+                    <img src="{{ art_img | image_url: width: 1200 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 {% if mod == 2 %}grayscale hover:grayscale-0{% endif %}">
+                  {% else %}
+                    {% assign fallback = 'journal-article-' | append: mod | replace: '0', '4' | append: '.jpg' %}
+                    <img src="{{ fallback | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 {% if mod == 2 %}grayscale hover:grayscale-0{% endif %}">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
+                </a>
+                {% unless section.settings.hide_article_text %}
+                  <div class="{% if mod == 0 %}pl-8 border-l border-brand-gold/30{% endif %}">
+                    <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
+                    <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
+                      <a href="{{ article.url }}">{{ article.title }}</a>
+                    </h3>
+                    <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
+                      {{ article.excerpt_or_content | strip_html | truncatewords: 20 }}
+                    </p>
+                    <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
+                  </div>
+                {% endunless %}
+              </article>
+            {% endif %}
+
+          {% elsif block.type == 'editorial_image' %}
+            <div class="col-span-1 md:col-span-{{ block.settings.col_span_desktop }} {{ block.settings.margin_top_desktop }} px-0" {{ block.shopify_attributes }}>
+              <div class="relative overflow-hidden {{ block.settings.aspect_ratio }} border border-brand-maroon/10">
+                {% if block.settings.image %}
+                  <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000">
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover opacity-20 bg-surface-container' }}
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {%- endfor -%}
+
+      {%- else -%}
+        <!-- Fallback to Automatic Blog Loop if no blocks are added -->
+        {%- assign current_blog = section.settings.blog | default: blog -%}
+        {%- if current_blog != blank -%}
+          {%- for article in current_blog.articles offset: 1 -%}
+            {%- assign loop_index = forloop.index -%}
+            {%- assign mod = loop_index | modulo: 4 -%}
             
             {% if section.settings.show_newsletter and loop_index == 3 %}
-              <!-- Newsletter Block Interruption -->
-              <div class="col-span-1 md:col-span-12 my-12 md:my-24">
-                <section class="bg-[#Fdfaf8] border border-brand-maroon/20 py-16 md:py-24 px-4 md:px-8 text-center max-w-4xl mx-auto flex flex-col items-center">
-                  <span class="material-symbols-outlined text-brand-gold text-[32px] mb-6 block">{{ section.settings.newsletter_icon | default: 'drafts' }}</span>
-                  <h2 class="font-headline-xl text-3xl md:text-5xl text-brand-maroon mb-6 italic">
-                    {{ section.settings.newsletter_title | default: "The Private Compendium" }}
-                  </h2>
-                  <p class="font-nav-label text-[14px] text-on-surface-variant mb-10 normal-case font-normal max-w-lg mx-auto">
-                    {{ section.settings.newsletter_description | default: "Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays." }}
-                  </p>
-                  {% form 'customer', class: 'w-full max-w-md flex flex-col sm:flex-row gap-4' %}
-                    <input type="hidden" name="contact[tags]" value="newsletter">
-                    <input class="flex-1 bg-transparent border-0 border-b border-brand-maroon focus:ring-0 focus:border-brand-gold font-data-sm text-[10px] py-3 px-0 placeholder:text-on-surface-variant/50 uppercase tracking-widest" 
-                           placeholder="{{ 'newsletter.label' | t | default: 'YOUR EMAIL ADDRESS' }}" 
-                           type="email" 
-                           name="contact[email]" 
-                           required>
-                    <button class="border border-brand-maroon text-brand-maroon hover:bg-brand-maroon hover:text-white font-nav-label text-[10px] px-8 py-3 transition-colors duration-300 tracking-widest uppercase" type="submit">
-                      {{ section.settings.newsletter_button_label | default: "SUBSCRIBE" }}
-                    </button>
-                  {% endform %}
-                </section>
-              </div>
+              {% render 'newsletter-interruption', section: section %}
             {% endif %}
 
             {% capture article_classes %}
@@ -135,58 +187,19 @@
                   {% assign fallback = 'journal-article-' | append: mod | replace: '0', '4' | append: '.jpg' %}
                   <img src="{{ fallback | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 {% if mod == 2 %}grayscale hover:grayscale-0{% endif %}">
                 {% endif %}
-                <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
               </a>
               {% unless section.settings.hide_article_text %}
                 <div class="{% if mod == 0 %}pl-8 border-l border-brand-gold/30{% endif %}">
-                  <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
-                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
-                    <a href="{{ article.url }}">{{ article.title }}</a>
-                  </h3>
-                  <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
-                    {{ article.excerpt_or_content | strip_html | truncatewords: 20 }}
-                  </p>
+                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3"><a href="{{ article.url }}">{{ article.title }}</a></h3>
                   <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
                 </div>
               {% endunless %}
             </article>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
 
-          {% endfor %}
-
-          <!-- Custom Image Blocks -->
-          {% for block in section.blocks %}
-            {% if block.type == 'editorial_image' %}
-              <div class="col-span-1 md:col-span-{{ block.settings.col_span_desktop }} {{ block.settings.margin_top_desktop }} px-0" {{ block.shopify_attributes }}>
-                <div class="relative overflow-hidden {{ block.settings.aspect_ratio }} border border-brand-maroon/10">
-                  {% if block.settings.image %}
-                    <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000">
-                  {% else %}
-                    {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover opacity-20 bg-surface-container' }}
-                  {% endif %}
-                </div>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-        {% if paginate.pages > 1 %}
-          <div class="mt-24 md:mt-32 flex justify-center border-t border-brand-maroon/10 pt-12">
-            {{ paginate | default_pagination }}
-          </div>
-        {% endif %}
-      {% endpaginate %}
-    {% else %}
-      <div class="text-center py-24 md:py-32">
-        <h2 class="font-headline-xl text-3xl text-brand-maroon">
-          {% if section.settings.blog == blank %}
-            Please select a blog to display posts.
-          {% else %}
-            {{ section.settings.no_articles_text | default: "No journal entries found." }}
-          {% endif %}
-        </h2>
-        <a href="{{ shop.url }}" class="text-brand-gold uppercase tracking-widest mt-8 inline-block">Return to Boutique</a>
-      </div>
-    {% endif %}
   </div>
 </main>
 
@@ -196,32 +209,35 @@
   "settings": [
     {
       "type": "header",
-      "content": "Content Selection"
-    },
-    {
-      "type": "blog",
-      "id": "blog",
-      "label": "Select Blog",
-      "info": "Choose which blog to pull posts from. If empty, it will automatically use the current blog (if on a blog page)."
-    },
-    {
-      "type": "header",
-      "content": "Layout Settings"
-    },
-    {
-      "type": "range",
-      "id": "articles_per_page",
-      "min": 4,
-      "max": 24,
-      "step": 2,
-      "label": "Articles per page",
-      "default": 10
+      "content": "Curated Hero"
     },
     {
       "type": "checkbox",
       "id": "show_hero",
       "label": "Show Featured Hero Article",
       "default": true
+    },
+    {
+      "type": "article",
+      "id": "hero_article",
+      "label": "Hero Article",
+      "info": "Override the hero article. If empty, uses the first article from the selected blog."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image Override",
+      "info": "Override the featured image for the hero."
+    },
+    {
+      "type": "header",
+      "content": "Global Settings"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Fallback Blog",
+      "info": "Used if no blocks are added below."
     },
     {
       "type": "checkbox",
@@ -231,24 +247,9 @@
     },
     {
       "type": "checkbox",
-      "id": "show_categories",
-      "label": "Show Category Bar",
-      "default": true
-    },
-    {
-      "type": "checkbox",
       "id": "enable_masonry",
       "label": "Enable Masonry Grid Offsets",
       "default": true
-    },
-    {
-      "type": "range",
-      "id": "heading_scale",
-      "min": 0.8,
-      "max": 1.5,
-      "step": 0.1,
-      "label": "Heading Scale Factor",
-      "default": 1.0
     },
     {
       "type": "range",
@@ -283,18 +284,6 @@
       "default": "#D4AF37"
     },
     {
-      "type": "color",
-      "id": "text_color",
-      "label": "Body Text Color",
-      "default": "#1c1b19"
-    },
-    {
-      "type": "color",
-      "id": "text_muted_color",
-      "label": "Muted Text Color",
-      "default": "#4c444f"
-    },
-    {
       "type": "header",
       "content": "Newsletter Interruption"
     },
@@ -314,7 +303,7 @@
       "type": "textarea",
       "id": "newsletter_description",
       "label": "Newsletter Description",
-      "default": "Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays."
+      "default": "Join the inner circle."
     },
     {
       "type": "text",
@@ -330,7 +319,7 @@
     },
     {
       "type": "header",
-      "content": "Labels & Text"
+      "content": "Labels"
     },
     {
       "type": "text",
@@ -343,18 +332,29 @@
       "id": "read_more_label",
       "label": "Hero Button Label",
       "default": "DISCOVER THE STORY"
-    },
-    {
-      "type": "text",
-      "id": "no_articles_text",
-      "label": "No Articles Text",
-      "default": "No journal entries found."
     }
   ],
   "blocks": [
     {
+      "type": "article",
+      "name": "Featured Article",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image Override",
+          "info": "Override the featured image for this specific grid item."
+        }
+      ]
+    },
+    {
       "type": "editorial_image",
-      "name": "Editorial Image",
+      "name": "Editorial Image Only",
       "settings": [
         {
           "type": "image_picker",
@@ -401,7 +401,10 @@
     {
       "name": "Aromaras Editorial Journal",
       "blocks": [
-        { "type": "editorial_image" }
+        { "type": "article" },
+        { "type": "article" },
+        { "type": "article" },
+        { "type": "article" }
       ]
     }
   ]
