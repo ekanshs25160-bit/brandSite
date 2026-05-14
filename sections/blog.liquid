@@ -19,7 +19,7 @@
   
   <!-- 1. Sub Navigation Bar (Categories) -->
   <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
-    <div class="flex justify-center items-center w-full py-4 gap-8 overflow-x-auto max-w-screen-2xl mx-auto px-4 md:px-12 hide-scrollbar">
+    <div class="flex justify-center items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
       <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}">ALL ESSAYS</a>
       {% for tag in blog.all_tags %}
         <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}/tagged/{{ tag | handle }}">
@@ -29,13 +29,13 @@
     </div>
   </div>
 
-  <div class="max-w-screen-2xl mx-auto px-4 md:px-12 py-16">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16">
     {% paginate blog.articles by 10 %}
       
       {% if blog.articles.size > 0 %}
         <!-- 2. Hero Section (Featured Article) -->
         {% assign featured_article = blog.articles.first %}
-        <section class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-24 md:mb-32 items-center">
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-24 md:mb-32 items-center">
           <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px]">
             {% if featured_article.image %}
               <img src="{{ featured_article.image | image_url: width: 2000 }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
@@ -43,7 +43,7 @@
               <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
             {% endif %}
           </div>
-          <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-4 md:px-8 mt-8 md:mt-0">
+          <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-4 md:px-0 mt-8 md:mt-0">
             <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
               {{ featured_article.tags.first | default: "Featured Story" }}
             </span>
@@ -61,7 +61,7 @@
         </section>
 
         <!-- 3. Editorial Masonry Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-24">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
           {% for article in blog.articles offset: 1 %}
             {% assign mod = forloop.index | modulo: 4 %}
             
@@ -123,7 +123,7 @@
                   {% endif %}
                   <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
                 </a>
-                <div class="max-w-md ml-auto text-right md:text-left">
+                <div class="max-w-md md:ml-0 text-left">
                   <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
                   <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
                     <a href="{{ article.url }}">{{ article.title }}</a>
