@@ -1,41 +1,41 @@
-<section class="bg-surface-container-low mt-24 py-32">
-  <div class="max-w-screen-2xl mx-auto px-12">
-    <div class="text-center mb-20">
-      <h2 class="text-4xl font-serif mb-4">The Olfactory Architecture</h2>
-      <p class="text-on-surface-variant max-w-xl mx-auto font-light">A complex evolution that unfolds on the skin over twelve hours.</p>
+<section class="bg-brand-cream mt-24 py-24 md:py-32 border-y border-brand-maroon/5">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="text-center mb-16 md:mb-20">
+      <h2 class="font-headline-xl text-3xl md:text-5xl text-brand-maroon mb-4">The Olfactory Architecture</h2>
+      <p class="font-nav-label text-xs tracking-widest text-on-surface-variant max-w-xl mx-auto uppercase">A complex evolution that unfolds on the skin over twelve hours.</p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
       <!-- Top -->
-      <div class="flex flex-col items-center text-center space-y-6">
-        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
-          <span class="material-symbols-outlined text-4xl text-primary">air</span>
+      <div class="flex flex-col items-center text-center space-y-6 group">
+        <div class="w-24 h-24 bg-white flex items-center justify-center border border-brand-maroon/5 group-hover:border-brand-gold transition-colors duration-500">
+          <span class="material-symbols-outlined text-4xl text-brand-gold">air</span>
         </div>
         <div>
-          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Top Notes</h3>
-          <p class="font-serif italic text-lg">{{ section.settings.top_notes | default: 'Saffron, Bergamot, Pink Pepper' }}</p>
-          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">Immediate Impression (0-30 mins)</p>
+          <h3 class="font-data-sm text-[10px] uppercase tracking-[0.2em] mb-3 text-brand-gold font-bold">Top Notes</h3>
+          <p class="font-headline-lg italic text-xl md:text-2xl text-brand-maroon">{{ section.settings.top_notes | default: 'Saffron, Bergamot, Pink Pepper' }}</p>
+          <p class="font-data-sm text-[9px] uppercase mt-4 text-on-surface-variant tracking-widest">Immediate Impression (0-30 mins)</p>
         </div>
       </div>
       <!-- Heart -->
-      <div class="flex flex-col items-center text-center space-y-6">
-        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
-          <span class="material-symbols-outlined text-4xl text-primary">favorite</span>
+      <div class="flex flex-col items-center text-center space-y-6 group">
+        <div class="w-24 h-24 bg-white flex items-center justify-center border border-brand-maroon/5 group-hover:border-brand-gold transition-colors duration-500">
+          <span class="material-symbols-outlined text-4xl text-brand-gold">favorite</span>
         </div>
         <div>
-          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Heart Notes</h3>
-          <p class="font-serif italic text-lg">{{ section.settings.heart_notes | default: 'Oudh, Crimson Rose, Jasmine' }}</p>
-          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Scent Identity (1-4 hours)</p>
+          <h3 class="font-data-sm text-[10px] uppercase tracking-[0.2em] mb-3 text-brand-gold font-bold">Heart Notes</h3>
+          <p class="font-headline-lg italic text-xl md:text-2xl text-brand-maroon">{{ section.settings.heart_notes | default: 'Oudh, Crimson Rose, Jasmine' }}</p>
+          <p class="font-data-sm text-[9px] uppercase mt-4 text-on-surface-variant tracking-widest">The Scent Identity (1-4 hours)</p>
         </div>
       </div>
       <!-- Base -->
-      <div class="flex flex-col items-center text-center space-y-6">
-        <div class="w-24 h-24 bg-surface-container-highest flex items-center justify-center">
-          <span class="material-symbols-outlined text-4xl text-primary">grass</span>
+      <div class="flex flex-col items-center text-center space-y-6 group">
+        <div class="w-24 h-24 bg-white flex items-center justify-center border border-brand-maroon/5 group-hover:border-brand-gold transition-colors duration-500">
+          <span class="material-symbols-outlined text-4xl text-brand-gold">grass</span>
         </div>
         <div>
-          <h3 class="text-xs uppercase tracking-[0.2em] mb-2 font-semibold">Base Notes</h3>
-          <p class="font-serif italic text-lg">{{ section.settings.base_notes | default: 'Sandalwood, Vanilla, Amber' }}</p>
-          <p class="text-[10px] uppercase mt-2 text-on-surface-variant">The Dry Down (4-12 hours)</p>
+          <h3 class="font-data-sm text-[10px] uppercase tracking-[0.2em] mb-3 text-brand-gold font-bold">Base Notes</h3>
+          <p class="font-headline-lg italic text-xl md:text-2xl text-brand-maroon">{{ section.settings.base_notes | default: 'Sandalwood, Vanilla, Amber' }}</p>
+          <p class="font-data-sm text-[9px] uppercase mt-4 text-on-surface-variant tracking-widest">The Dry Down (4-12 hours)</p>
         </div>
       </div>
     </div>
