@@ -1,243 +1,218 @@
 {% style %}
   #shopify-section-{{ section.id }} {
-    --blog-bg: {{ section.settings.bg_color }};
-    --blog-text: {{ section.settings.text_color }};
-    --blog-accent: {{ section.settings.accent_color }};
-    --blog-maroon: {{ section.settings.maroon_color }};
-    --heading-scale: {{ section.settings.heading_scale }};
-    --post-spacing: {{ section.settings.post_spacing }}px;
+    --blog-heading-scale: {{ section.settings.heading_scale }};
+    --blog-gutter: {{ section.settings.post_spacing }}px;
   }
 
-  #shopify-section-{{ section.id }} .editorial-title {
-    font-family: {{ section.settings.title_font_family }};
-    font-size: calc(3.5rem * var(--heading-scale));
-    letter-spacing: -0.02em;
-  }
-
-  @media (max-width: 767px) {
-    #shopify-section-{{ section.id }} .editorial-title {
-      font-size: calc(2rem * var(--heading-scale));
-    }
-  }
-
-  #shopify-section-{{ section.id }} .font-serif {
-    font-family: {{ section.settings.title_font_family }};
-  }
-
-  #shopify-section-{{ section.id }} .font-sans {
-    font-family: {{ section.settings.body_font_family }};
-  }
-
-  #shopify-section-{{ section.id }} .font-accent {
-    font-family: {{ section.settings.accent_font_family }};
-  }
-
-  #shopify-section-{{ section.id }} img, 
-  #shopify-section-{{ section.id }} input, 
+  #shopify-section-{{ section.id }} img,
+  #shopify-section-{{ section.id }} input,
   #shopify-section-{{ section.id }} button {
     border-radius: 0 !important;
   }
 
-  #shopify-section-{{ section.id }} .maroon-overlay::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: var(--blog-maroon);
-    opacity: 0.05;
-    pointer-events: none;
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 {% endstyle %}
 
-<div class="bg-[var(--blog-bg)] text-[var(--blog-text)] overflow-hidden">
-  <!-- 1. Masthead -->
-  <header class="pt-16 md:pt-24 px-4 md:px-12 max-w-screen-2xl mx-auto">
-    <div class="flex flex-col items-center text-center gap-4 mb-12">
-      <h1 class="editorial-title uppercase">
-        {{ section.settings.masthead_title }}
-      </h1>
-      <p class="font-sans text-[10px] md:text-xs uppercase tracking-[0.4em] opacity-60">
-        {{ section.settings.masthead_subtitle }}
-      </p>
+<main class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased selection:bg-brand-maroon selection:text-white">
+  
+  <!-- 1. Sub Navigation Bar (Categories) -->
+  <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
+    <div class="flex justify-center items-center w-full py-4 gap-8 overflow-x-auto max-w-screen-2xl mx-auto px-4 md:px-12 hide-scrollbar">
+      <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}">ALL ESSAYS</a>
+      {% for tag in blog.all_tags %}
+        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-secondary font-bold{% else %}text-on-surface-variant hover:text-primary{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}/tagged/{{ tag | handle }}">
+          {{ tag | uppercase }}
+        </a>
+      {% endfor %}
     </div>
-    <div class="w-full h-[1px] bg-[var(--blog-accent)] opacity-30"></div>
-  </header>
+  </div>
 
-  <div class="max-w-screen-2xl mx-auto px-4 md:px-12 py-12 md:py-20">
-    {% paginate blog.articles by 11 %}
-      <!-- Featured & Grid Container -->
-      <div class="flex flex-col gap-[var(--post-spacing)]">
-        
-        {% for article in blog.articles %}
-          {% if forloop.first %}
-            <!-- 2. Cover Story (Featured Post) -->
-            <article class="grid grid-cols-1 md:grid-cols-2 min-h-[600px] bg-white shadow-sm">
-              <div class="relative overflow-hidden aspect-[4/5] md:aspect-auto maroon-overlay">
-                {% if article.image %}
-                  <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title }}" class="w-full h-full object-cover">
-                {% else %}
-                  {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-neutral-100' }}
-                {% endif %}
-              </div>
-              <div class="flex flex-col justify-center p-8 md:p-20 text-center md:text-left gap-8">
-                <div class="space-y-4">
-                  <span class="font-accent text-[10px] uppercase tracking-[0.3em] text-[var(--blog-accent)] font-semibold">
-                    {{ article.tags.first | default: "Essays" }}
-                  </span>
-                  <h2 class="font-serif text-3xl md:text-5xl leading-tight">
-                    {{ article.title }}
-                  </h2>
-                  <p class="font-sans text-sm md:text-base opacity-70 leading-relaxed max-w-md mx-auto md:mx-0">
-                    {{ article.excerpt_or_content | strip_html | truncatewords: 30 }}
-                  </p>
-                </div>
-                <a href="{{ article.url }}" class="w-fit mx-auto md:mx-0 border border-[var(--blog-text)] px-8 py-4 text-[10px] font-sans uppercase tracking-[0.3em] hover:bg-[var(--blog-text)] hover:text-white transition-all">
-                  {{ section.settings.explore_button_label }}
-                </a>
-              </div>
-            </article>
+  <div class="max-w-screen-2xl mx-auto px-4 md:px-12 py-16">
+    {% paginate blog.articles by 10 %}
+      
+      {% if blog.articles.size > 0 %}
+        <!-- 2. Hero Section (Featured Article) -->
+        {% assign featured_article = blog.articles.first %}
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-24 md:mb-32 items-center">
+          <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px]">
+            {% if featured_article.image %}
+              <img src="{{ featured_article.image | image_url: width: 2000 }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
+            {% else %}
+              <img src="{{ 'journal-hero.jpg' | asset_url }}" alt="{{ featured_article.title }}" class="absolute inset-0 w-full h-full object-cover object-center border border-brand-maroon/20">
+            {% endif %}
+          </div>
+          <div class="col-span-1 md:col-span-4 flex flex-col justify-center px-4 md:px-8 mt-8 md:mt-0">
+            <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] mb-4 block">
+              {{ featured_article.tags.first | default: "Featured Story" }}
+            </span>
+            <h1 class="font-headline-xl text-4xl md:text-5xl lg:text-6xl text-brand-maroon mb-6 leading-tight">
+              {{ featured_article.title }}
+            </h1>
+            <p class="font-nav-label text-[14px] leading-relaxed text-on-surface-variant mb-10 normal-case font-normal">
+              {{ featured_article.excerpt_or_content | strip_html | truncatewords: 35 }}
+            </p>
+            <a class="inline-flex items-center group self-start" href="{{ featured_article.url }}">
+              <span class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-1 group-hover:text-primary transition-colors tracking-widest uppercase">DISCOVER THE STORY</span>
+              <span class="material-symbols-outlined ml-2 text-brand-gold group-hover:text-brand-maroon transition-colors text-[18px]">arrow_right_alt</span>
+            </a>
+          </div>
+        </section>
 
-            <!-- Start Grid for remaining posts -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-[var(--post-spacing)]">
-          {% else %}
-            <!-- 3. Journal Cards -->
-            <article class="flex flex-col group">
-              <a href="{{ article.url }}" class="block relative overflow-hidden aspect-[4/5] bg-neutral-100 mb-8">
-                {% if article.image %}
-                  <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                {% else %}
-                   {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover' }}
-                {% endif %}
-              </a>
-              <div class="flex flex-col gap-3">
-                <span class="font-accent text-[9px] uppercase tracking-[0.3em] text-[var(--blog-accent)] font-bold">
-                  {{ article.tags.first | default: "Journal" }}
-                </span>
-                <h3 class="font-serif text-2xl group-hover:italic transition-all duration-300">
-                  <a href="{{ article.url }}">{{ article.title }}</a>
-                </h3>
-                <div class="flex gap-4 items-center font-sans text-[10px] uppercase tracking-widest text-neutral-400">
-                   <span>{{ article.published_at | date: "%B %d, %Y" }}</span>
-                   <span class="w-1 h-1 bg-neutral-300 rounded-full"></span>
-                   <span>
-                    {% assign words = article.content | strip_html | split: ' ' | size %}
-                    {{ words | divided_by: 200 | plus: 1 }} Min Read
-                   </span>
-                </div>
-              </div>
-            </article>
-          {% endif %}
-
-          {% if forloop.index == 3 %}
-            </div> <!-- Close Grid -->
+        <!-- 3. Editorial Masonry Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-x-12 gap-y-24">
+          {% for article in blog.articles offset: 1 %}
+            {% assign mod = forloop.index | modulo: 4 %}
             
-            <!-- 4. Newsletter Interruption -->
-            <section class="full-width-newsletter -mx-4 md:-mx-12 py-24 md:py-32 flex flex-col items-center text-center px-4" style="background-color: var(--blog-maroon);">
-              <div class="max-w-2xl">
-                <h2 class="font-serif text-3xl md:text-5xl text-white italic mb-6">Join the Maison</h2>
-                <p class="font-sans text-[10px] md:text-xs text-white/60 uppercase tracking-[0.4em] mb-12">
-                  Be the first to explore new olfactory narratives.
-                </p>
-                <div class="relative w-full max-w-md mx-auto">
-                  <input type="email" placeholder="YOUR EMAIL ADDRESS" class="w-full bg-transparent border-b border-[var(--blog-accent)] py-4 text-[10px] tracking-widest text-white placeholder:text-white/20 focus:outline-none uppercase">
-                  <button class="absolute right-0 top-1/2 -translate-y-1/2 text-white material-symbols-outlined text-sm">east</button>
-                </div>
+            {% if forloop.index == 3 %}
+              <!-- Newsletter Block Interruption -->
+              <div class="col-span-1 md:col-span-12 my-12">
+                <section class="bg-[#Fdfaf8] border border-brand-maroon/20 py-24 px-8 text-center max-w-4xl mx-auto flex flex-col items-center">
+                  <span class="material-symbols-outlined text-brand-gold text-[32px] mb-6 block">drafts</span>
+                  <h2 class="font-headline-xl text-3xl md:text-5xl text-brand-maroon mb-6 italic">The Private Compendium</h2>
+                  <p class="font-nav-label text-[14px] text-on-surface-variant mb-10 normal-case font-normal max-w-lg mx-auto">
+                    Join the inner circle. Receive exclusive access to private compounding launches, archival restocks, and intimate olfactory essays.
+                  </p>
+                  {% form 'customer', class: 'w-full max-w-md flex flex-col sm:flex-row gap-4' %}
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <input class="flex-1 bg-transparent border-0 border-b border-brand-maroon focus:ring-0 focus:border-brand-gold font-data-sm text-[10px] py-3 px-0 placeholder:text-on-surface-variant/50 uppercase tracking-widest" 
+                           placeholder="YOUR EMAIL ADDRESS" 
+                           type="email" 
+                           name="contact[email]" 
+                           required>
+                    <button class="border border-brand-maroon text-brand-maroon hover:bg-brand-maroon hover:text-white font-nav-label text-[10px] px-8 py-3 transition-colors duration-300 tracking-widest uppercase" type="submit">
+                      SUBSCRIBE
+                    </button>
+                  {% endform %}
+                </section>
               </div>
-            </section>
+            {% endif %}
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-[var(--post-spacing)]"> <!-- Reopen Grid -->
-          {% endif %}
+            {% if mod == 1 %}
+              <!-- Article Type 1: md:col-span-5, aspect-[4/5] -->
+              <article class="col-span-1 md:col-span-5 group cursor-pointer">
+                <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-[4/5] border border-brand-maroon/10">
+                  {% if article.image %}
+                    <img src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                  {% else %}
+                    <img src="{{ 'journal-article-1.jpg' | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
+                </a>
+                <div>
+                  <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
+                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                  </h3>
+                  <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
+                    {{ article.excerpt_or_content | strip_html | truncatewords: 20 }}
+                  </p>
+                  <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
+                </div>
+              </article>
 
-          {% if forloop.last %}
-            </div> <!-- Close Grid Final -->
-          {% endif %}
-        {% endfor %}
+            {% elsif mod == 2 %}
+              <!-- Article Type 2: md:col-span-7, aspect-[16/9], md:mt-32 -->
+              <article class="col-span-1 md:col-span-7 group cursor-pointer md:mt-32">
+                <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-[16/9] border border-brand-maroon/10">
+                  {% if article.image %}
+                    <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0">
+                  {% else %}
+                    <img src="{{ 'journal-article-2.jpg' | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0 opacity-80">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
+                </a>
+                <div class="max-w-md ml-auto text-right md:text-left">
+                  <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
+                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                  </h3>
+                  <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
+                    {{ article.excerpt_or_content | strip_html | truncatewords: 25 }}
+                  </p>
+                  <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
+                </div>
+              </article>
 
-      </div>
+            {% elsif mod == 3 %}
+              <!-- Article Type 3: md:col-span-4, aspect-[3/4] -->
+              <article class="col-span-1 md:col-span-4 group cursor-pointer">
+                <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-[3/4] border border-brand-maroon/10">
+                  {% if article.image %}
+                    <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                  {% else %}
+                    <img src="{{ 'journal-article-3.jpg' | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
+                </a>
+                <div>
+                  <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
+                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                  </h3>
+                  <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
+                    {{ article.excerpt_or_content | strip_html | truncatewords: 20 }}
+                  </p>
+                  <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
+                </div>
+              </article>
 
-      {% if paginate.pages > 1 %}
-        <div class="mt-20 flex justify-center border-t border-outline-variant/10 pt-12">
-          {{ paginate | default_pagination }}
+            {% else %}
+              <!-- Article Type 4: md:col-span-6, aspect-square, md:mt-24 -->
+              <!-- Empty space for layout tension -->
+              <div class="hidden md:block md:col-span-2"></div>
+              <article class="col-span-1 md:col-span-6 group cursor-pointer md:mt-24">
+                <a href="{{ article.url }}" class="block relative overflow-hidden mb-6 aspect-square border border-brand-maroon/10">
+                  {% if article.image %}
+                    <img src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                  {% else %}
+                    <img src="{{ 'journal-article-4.jpg' | asset_url }}" alt="{{ article.title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-brand-maroon/0 group-hover:bg-brand-maroon/10 transition-colors duration-500"></div>
+                </a>
+                <div class="pl-8 border-l border-brand-gold/30">
+                  <span class="font-data-sm text-[10px] text-brand-gold uppercase tracking-[0.15em] block mb-3">{{ article.tags.first | default: "Journal" }}</span>
+                  <h3 class="font-headline-lg text-2xl md:text-3xl text-brand-maroon mb-3 group-hover:opacity-80 transition-opacity">
+                    <a href="{{ article.url }}">{{ article.title }}</a>
+                  </h3>
+                  <p class="font-nav-label text-[13px] text-on-surface-variant mb-4 normal-case font-normal leading-relaxed">
+                    {{ article.excerpt_or_content | strip_html | truncatewords: 25 }}
+                  </p>
+                  <a href="{{ article.url }}" class="font-nav-label text-[10px] text-brand-maroon border-b border-brand-gold pb-0.5 inline-block tracking-widest uppercase">READ MORE</a>
+                </div>
+              </article>
+            {% endif %}
+
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <div class="mt-32 flex justify-center border-t border-brand-maroon/10 pt-12">
+            {{ paginate | default_pagination }}
+          </div>
+        {% endif %}
+
+      {% else %}
+        <div class="text-center py-32">
+          <h2 class="font-headline-xl text-3xl text-brand-maroon">No journal entries found.</h2>
+          <a href="{{ shop.url }}" class="text-brand-gold uppercase tracking-widest mt-8 inline-block">Return to Boutique</a>
         </div>
       {% endif %}
+
     {% endpaginate %}
   </div>
-</div>
+</main>
 
 {% schema %}
 {
   "name": "Aromaras Editorial Blog",
   "settings": [
     {
-      "type": "header",
-      "content": "Masthead Settings"
-    },
-    {
-      "type": "text",
-      "id": "masthead_title",
-      "label": "Masthead Title",
-      "default": "THE OLFACTORY JOURNAL"
-    },
-    {
-      "type": "text",
-      "id": "masthead_subtitle",
-      "label": "Masthead Subtitle",
-      "default": "DISPATCHES FROM THE FRAGRANCE MAISON"
-    },
-    {
-      "type": "header",
-      "content": "Appearance & Colors"
-    },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "Background Color",
-      "default": "#faf9f7"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text Color",
-      "default": "#1a1c1b"
-    },
-    {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Accent Color (Gold)",
-      "default": "#d4af37"
-    },
-    {
-      "type": "color",
-      "id": "maroon_color",
-      "label": "Newsletter/Overlay Color (Maroon)",
-      "default": "#2d004b"
-    },
-    {
-      "type": "header",
-      "content": "Typography"
-    },
-    {
-      "type": "text",
-      "id": "title_font_family",
-      "label": "Title Font Family",
-      "default": "'Noto Serif', serif"
-    },
-    {
-      "type": "text",
-      "id": "body_font_family",
-      "label": "Body Font Family",
-      "default": "'Inter', sans-serif"
-    },
-    {
-      "type": "text",
-      "id": "accent_font_family",
-      "label": "Accent Font Family (Small-caps)",
-      "default": "'Montserrat', sans-serif"
-    },
-    {
       "type": "range",
       "id": "heading_scale",
       "min": 0.8,
-      "max": 2.0,
+      "max": 1.5,
       "step": 0.1,
       "label": "Heading Scale Factor",
       "default": 1.0
@@ -246,21 +221,11 @@
       "type": "range",
       "id": "post_spacing",
       "min": 40,
-      "max": 160,
+      "max": 120,
       "step": 10,
       "unit": "px",
-      "label": "Post Spacing (Gutter)",
+      "label": "Grid Spacing",
       "default": 80
-    },
-    {
-      "type": "header",
-      "content": "Button Labels"
-    },
-    {
-      "type": "text",
-      "id": "explore_button_label",
-      "label": "Featured Post Button",
-      "default": "EXPLORE ESSAY"
     }
   ],
   "presets": [
