@@ -23,17 +23,19 @@
   }
 {% endstyle %}
 
+{%- assign selected_blog = section.settings.blog | default: blog -%}
+
 <main class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased selection:bg-brand-maroon selection:text-white">
   
-  {% if section.settings.show_categories %}
+  {% if section.settings.show_categories and selected_blog != blank %}
     <!-- 1. Sub Navigation Bar (Categories) -->
     <div class="bg-background dark:bg-on-background full-width border-b border-secondary/10 flat no shadows sticky top-[72px] md:top-[89px] z-40 bg-opacity-95 backdrop-blur-sm">
       <div class="flex items-center w-full py-4 gap-8 overflow-x-auto max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop hide-scrollbar">
-        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}">
+        <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags == null %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ selected_blog.url }}">
           {{ section.settings.all_essays_label | default: "ALL ESSAYS" }}
         </a>
-        {% for tag in blog.all_tags %}
-          <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ blog.url }}/tagged/{{ tag | handle }}">
+        {% for tag in selected_blog.all_tags %}
+          <a class="font-nav-label text-[10px] uppercase tracking-[0.15em] {% if current_tags contains tag %}text-brand-gold font-bold{% else %}text-on-surface-variant hover:text-brand-maroon{% endif %} underline-offset-4 hover:underline whitespace-nowrap" href="{{ selected_blog.url }}/tagged/{{ tag | handle }}">
             {{ tag | uppercase }}
           </a>
         {% endfor %}
@@ -42,13 +44,12 @@
   {% endif %}
 
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-16">
-    {% paginate blog.articles by section.settings.articles_per_page %}
-      
-      {% if blog.articles.size > 0 %}
+    {% if selected_blog != blank and selected_blog.articles.size > 0 %}
+      {% paginate selected_blog.articles by section.settings.articles_per_page %}
         
         {% if section.settings.show_hero %}
           <!-- 2. Hero Section (Featured Article) -->
-          {% assign featured_article = blog.articles.first %}
+          {% assign featured_article = selected_blog.articles.first %}
           <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-16 md:mb-32 items-center">
             <div class="col-span-1 md:col-span-8 relative aspect-[16/9] md:h-[600px] lg:h-[800px] overflow-hidden">
               {% if featured_article.image %}
@@ -84,7 +85,7 @@
 
         <!-- 3. Editorial Masonry Grid -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
-          {% for article in blog.articles offset: offset_val %}
+          {% for article in selected_blog.articles offset: offset_val %}
             {% assign loop_index = forloop.index %}
             {% assign mod = loop_index | modulo: 4 %}
             
@@ -173,15 +174,19 @@
             {{ paginate | default_pagination }}
           </div>
         {% endif %}
-
-      {% else %}
-        <div class="text-center py-24 md:py-32">
-          <h2 class="font-headline-xl text-3xl text-brand-maroon">{{ section.settings.no_articles_text | default: "No journal entries found." }}</h2>
-          <a href="{{ shop.url }}" class="text-brand-gold uppercase tracking-widest mt-8 inline-block">Return to Boutique</a>
-        </div>
-      {% endif %}
-
-    {% endpaginate %}
+      {% endpaginate %}
+    {% else %}
+      <div class="text-center py-24 md:py-32">
+        <h2 class="font-headline-xl text-3xl text-brand-maroon">
+          {% if section.settings.blog == blank %}
+            Please select a blog to display posts.
+          {% else %}
+            {{ section.settings.no_articles_text | default: "No journal entries found." }}
+          {% endif %}
+        </h2>
+        <a href="{{ shop.url }}" class="text-brand-gold uppercase tracking-widest mt-8 inline-block">Return to Boutique</a>
+      </div>
+    {% endif %}
   </div>
 </main>
 
@@ -189,6 +194,16 @@
 {
   "name": "Aromaras Editorial Blog",
   "settings": [
+    {
+      "type": "header",
+      "content": "Content Selection"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Blog",
+      "info": "Choose which blog to pull posts from. If empty, it will automatically use the current blog (if on a blog page)."
+    },
     {
       "type": "header",
       "content": "Layout Settings"
